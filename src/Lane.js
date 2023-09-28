@@ -1,8 +1,10 @@
 import { BasicNode } from "./BasicNode.js";
+import { LaneNode } from "./LaneNode.js";
 
 export class Lane {
     constructor(nodes, speedLimit, color="red") {
         this._nodes = nodes;
+        this.addSelfToNodes();
         this._speedLimit = speedLimit;
         this._color = color;
         this._vehicles = [];
@@ -30,6 +32,14 @@ export class Lane {
     }
     get vehicles() {
         return this._vehicles;
+    }
+    //add reference to self to nodes
+    addSelfToNodes(){
+        for(let node of this.nodes){
+            if(node instanceof LaneNode && !node.lanes.includes(this)){
+                node.lanes.push(this);
+            }
+        }
     }
     //Get total length of lane
     length() {

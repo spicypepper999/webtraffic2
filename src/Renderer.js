@@ -23,6 +23,7 @@ const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, []);
 
 const map1 = new TrafficMap([road1, road2, road3], [car1], [intersection1]);
 
+//roads
 for (let road of map1.roads) {
     for (let lane of road.lanes) {
         let laneCoordinates = [];
@@ -48,6 +49,7 @@ for (let road of map1.roads) {
     }
 }
 
+//intersections
 for (let lane of map1.intersections[0].lanes){
     for(let i = 0; i < lane.nodes.length; i++){
         if(i >= 1){
@@ -57,6 +59,7 @@ for (let lane of map1.intersections[0].lanes){
     }
 }
 
+//vehicles
 let vehicles = [];
 for (let vehicle of map1.vehicles) {
     let newVehicle = two.makeRectangle(vehicle.XYDir().x, vehicle.XYDir().y, 10, 10);

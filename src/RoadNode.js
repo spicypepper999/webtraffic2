@@ -1,16 +1,16 @@
 import { BasicNode } from "./BasicNode.js";
 
 export class RoadNode extends BasicNode{
-    constructor(x, y, road=null, laneNodes=[]){
+    constructor(x, y, roads=[], laneNodes=[]){
         super(x, y);
-        this._road = road;
+        this._roads = roads;
         this._laneNodes = laneNodes;
     }
-    set road(value){
-        this._road = value;
+    set roads(value){
+        this._roads = value;
     }
-    get road(){
-        return this._road;
+    get roads(){
+        return this._roads;
     }
     set laneNodes(value){
         this._laneNodes = value;

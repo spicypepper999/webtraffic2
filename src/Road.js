@@ -1,6 +1,7 @@
 import { BasicNode } from "./BasicNode.js";
 import { RoadNode } from "./RoadNode.js";
 import { Lane } from "./Lane.js";
+import { LaneNode } from "./LaneNode.js";
 
 export class Road{
     constructor(nodes, lanes, speedLimit, color="red"){
@@ -35,14 +36,15 @@ export class Road{
     get color(){
         return this._color;
     }
+    //add reference to self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){
-            if(node instanceof RoadNode){
-                node.road = this;
+            if(node instanceof RoadNode && !node.roads.includes(this)){
+                node.roads.push(this);
             }
         }
     }
-    //chatgpt made this for me. idk what it does mathematically although im sure i could figure it out given enough drugs
+    //generates lanes, math logic is for keeping road width the same throughout sharp turns
     generateLanes(nodes, lanes, laneWidth){
         const newLanes = [];
         for (let i = 0; i < lanes; i++) {
@@ -71,10 +73,11 @@ export class Road{
                 const dx = (Math.cos(bisectorAngle + Math.PI / 2) * adjustedOffset);
                 const dy = (Math.sin(bisectorAngle + Math.PI / 2) * adjustedOffset);
     
-                const newNode = new BasicNode(node.x + dx, node.y + dy);
+                const newNode = new LaneNode(node.x + dx, node.y + dy);
                 newLane.nodes.push(newNode);
                 nodes[j].laneNodes.push(newNode);
             }
+            newLane.addSelfToNodes();
             newLanes.push(newLane);
         }
         //reverses lanes for opposing traffic

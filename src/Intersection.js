@@ -40,6 +40,7 @@ export class Intersection{
             this.lanes.push(new Lane([this.interfaceNodes[0].laneNodes[1], this.interfaceNodes[2].laneNodes[0]], 10));
             this.lanes.push(new Lane([this.interfaceNodes[2].laneNodes[1], this.interfaceNodes[0].laneNodes[0]], 10));
             this.lanes.push(new Lane([this.interfaceNodes[2].laneNodes[1], this.interfaceNodes[1].laneNodes[1]], 10));
+            console.log(this.interfaceNodes[0].laneNodes[0].lanes);
         }
     }
 }
