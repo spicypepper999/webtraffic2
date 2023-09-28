@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "two.js": "^0.8.11"
+  }
+}

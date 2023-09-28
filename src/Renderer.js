@@ -1,0 +1,76 @@
+//const Two = require('two');
+import Two from "../node_modules/two.js/src/two.js";
+import { Lane } from "./Lane.js";
+import { TrafficMap } from "./TrafficMap.js";
+import { BasicNode } from "./BasicNode.js";
+import { Vehicle } from "./Vehicle.js";
+import { Road } from "./Road.js";
+import { RoadNode } from "./RoadNode.js";
+import { Intersection } from "./Intersection.js";
+
+let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
+
+const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
+
+const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
+
+const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
+
+const intersection1 = new Intersection(500, 300, "T", [road1.nodes[2], road2.nodes[0], road3.nodes[2]]);
+
+
+const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, []);
+
+const map1 = new TrafficMap([road1, road2, road3], [car1], [intersection1]);
+
+for (let road of map1.roads) {
+    for (let lane of road.lanes) {
+        let laneCoordinates = [];
+
+        // for (let node of lane.nodes) {
+        //     laneCoordinates.push(node.x);
+        //     laneCoordinates.push(node.y);
+        // }
+        // let roadPath = two.makePath(...laneCoordinates, true);
+        // roadPath.linewidth = 10;
+        // roadPath.stroke = "black";
+
+        for(let i = 0; i < lane.nodes.length; i++){
+            if(i >= 1){
+            let linePath = two.makeLine(lane.nodes[i-1].x, lane.nodes[i-1].y, lane.nodes[i].x, lane.nodes[i].y);
+            }
+            let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
+        }
+    }
+    for(let node of road.nodes){
+        let roadNode = two.makeCircle(node.x, node.y, 5);
+        roadNode.fill = "lightgray";
+    }
+}
+
+for (let lane of map1.intersections[0].lanes){
+    for(let i = 0; i < lane.nodes.length; i++){
+        if(i >= 1){
+        let linePath = two.makeLine(lane.nodes[i-1].x, lane.nodes[i-1].y, lane.nodes[i].x, lane.nodes[i].y);
+        }
+        let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
+    }
+}
+
+let vehicles = [];
+for (let vehicle of map1.vehicles) {
+    let newVehicle = two.makeRectangle(vehicle.XYDir().x, vehicle.XYDir().y, 10, 10);
+    newVehicle.rotation = vehicle.XYDir().dir;
+    vehicles.push({ object: vehicle, sprite: newVehicle });
+}
+
+two.bind('update', function () {
+    for (let vehicle of vehicles) {
+        //does acceleration also need a timedelta meme? 
+        vehicle.object.accelerate();
+        vehicle.object.move((two.timeDelta / 1000));
+        vehicle.sprite.position.set(vehicle.object.XYDir().x, vehicle.object.XYDir().y);
+        vehicle.sprite.rotation = vehicle.object.XYDir().dir;
+        vehicle.sprite.fill = vehicle.object.color;
+    }
+});
