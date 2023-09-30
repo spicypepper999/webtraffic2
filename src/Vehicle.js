@@ -1,4 +1,5 @@
 import { Lane } from "./Lane.js";
+import { LaneIntersectionNode } from "./LaneIntersectionNode.js";
 
 export class Vehicle {
     constructor(position, direction, lane, speed, power, ruleset) {
@@ -62,6 +63,10 @@ export class Vehicle {
     }
     move(delta) {
         this.position += (this.speed * this.direction * delta);
+        if (this.position >= this.lane.length()) {
+            this.checkRuleset();
+        }
+        //console.log(this.position);
     }
     brake() {
         if (this.speed > 0) {
@@ -78,7 +83,22 @@ export class Vehicle {
         }
         this.color = "green";
     }
+    returnObstacles(distance) {
+        return this.lane.returnObstacles(this.position, distance, this);
+    }
     isObstacle() {
         return true;
+    }
+    checkRuleset() {
+        for (let i = 0; i < this.ruleset.length; i+=2) {
+            const checkNode = this.ruleset[i];
+            const nextLane = this.ruleset[i+1];
+            if (checkNode == this.lane.nodes[this.lane.nodes.length - 1]) {
+                checkNode.transferVehicle(this, nextLane);
+            }else{
+                //console.log(this.lane.nodes[this.lane.nodes.length - 1]);
+                this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+            }
+        }
     }
 }

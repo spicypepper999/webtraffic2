@@ -1,5 +1,6 @@
 import { BasicNode } from "./BasicNode.js";
 import { LaneNode } from "./LaneNode.js";
+import { LaneIntersectionNode } from "./LaneIntersectionNode.js";
 
 export class Lane {
     constructor(nodes, speedLimit, color="red") {
@@ -33,7 +34,7 @@ export class Lane {
     get vehicles() {
         return this._vehicles;
     }
-    //add reference to self to nodes
+    //add reference of self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){
             if(node instanceof LaneNode && !node.lanes.includes(this)){
@@ -101,5 +102,32 @@ export class Lane {
     }
     reverse(){
         this.nodes.reverse();
+    }
+    returnObstacles(position, distance, vehicle){
+        const obstacles = [];
+        for(let vehicle2 of this.vehicles){
+            if((vehicle != vehicle2) && ((vehicle2.position - position) <= distance) && ((vehicle2.position - position) >= 0)){
+                obstacles.push(vehicle2);
+            }
+        }
+        for(let node of this.nodes){
+            if(((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0) && node.isObstacle(vehicle)){
+                obstacles.push(node);
+            }
+        }
+        //console.log(obstacles);
+        return obstacles;
+    }
+    returnVehicles(position, distance){
+        const obstacles = [];
+        for(let vehicle of this.vehicles){
+            if(((vehicle.position - position) <= distance) && ((vehicle.position - position) >= 0)){
+                obstacles.push(vehicle);
+            }
+        }
+        return obstacles;
+    }
+    createEndStop(){
+        this.nodes[this.nodes.length - 1] = new LaneIntersectionNode(this.nodes[this.nodes.length - 1].x, this.nodes[this.nodes.length - 1].y, ["FULLSTOP"], this.nodes[this.nodes.length - 1].lanes);
     }
 }

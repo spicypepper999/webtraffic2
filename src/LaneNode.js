@@ -6,9 +6,12 @@ export class LaneNode extends BasicNode{
         this._lanes = lanes;
     }
     set lanes(value){
-        this._lanes = lanes;
+        this._lanes = value;
     }
     get lanes(){
         return this._lanes;
+    }
+    isObstacle() {
+        return false;
     }
 }

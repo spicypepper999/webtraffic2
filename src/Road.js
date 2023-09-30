@@ -36,7 +36,7 @@ export class Road{
     get color(){
         return this._color;
     }
-    //add reference to self to nodes
+    //add reference of self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){
             if(node instanceof RoadNode && !node.roads.includes(this)){
@@ -106,5 +106,10 @@ export class Road{
     }
     reverseOrder(){
         this.lanes.reverse();
+    }
+    convertEndStop(){
+        for(let lane of this.lanes){
+            lane.createEndStop();
+        }
     }
 }
