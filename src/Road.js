@@ -109,7 +109,26 @@ export class Road{
     }
     convertEndStop(){
         for(let lane of this.lanes){
-            lane.createEndStop();
+            const nodes = lane.createEndStop();
+            this.updateLaneNodeReference(nodes.oldNode, nodes.newNode);
+        }
+    }
+    updateLaneNodeReference(oldNode, newNode){
+        for(let node of this.nodes){
+            //for of loop didnt work here with references
+            for(let i = 0; i < node.laneNodes.length; i++){
+                if(node.laneNodes[i] == oldNode){
+                    node.laneNodes[i] = newNode;
+                }
+            }
+        }
+        for(let lane of this.lanes){
+            //for of loop didnt work here with references
+            for(let i = 0; i < lane.nodes.length; i++){
+                if(lane.nodes[i] == oldNode){
+                    lane.nodes[i] = newNode;
+                }
+            }
         }
     }
 }

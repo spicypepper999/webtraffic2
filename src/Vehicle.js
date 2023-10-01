@@ -66,6 +66,9 @@ export class Vehicle {
         if (this.position >= this.lane.length()) {
             this.checkRuleset();
         }
+        if(this.lane.speedLimit < this.speed){
+            this.brake();
+        }
         //console.log(this.position);
     }
     brake() {
@@ -96,7 +99,6 @@ export class Vehicle {
             if (checkNode == this.lane.nodes[this.lane.nodes.length - 1]) {
                 checkNode.transferVehicle(this, nextLane);
             }else{
-                //console.log(this.lane.nodes[this.lane.nodes.length - 1]);
                 this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
             }
         }

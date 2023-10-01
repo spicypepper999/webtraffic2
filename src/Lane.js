@@ -127,7 +127,11 @@ export class Lane {
         }
         return obstacles;
     }
+    //returns old and new node so road can update its own references
     createEndStop(){
-        this.nodes[this.nodes.length - 1] = new LaneIntersectionNode(this.nodes[this.nodes.length - 1].x, this.nodes[this.nodes.length - 1].y, ["FULLSTOP"], this.nodes[this.nodes.length - 1].lanes);
+        const newNode = new LaneIntersectionNode(this.nodes[this.nodes.length - 1].x, this.nodes[this.nodes.length - 1].y, ["FULLSTOP"], this.nodes[this.nodes.length - 1].lanes);
+        const oldNode = this.nodes[this.nodes.length - 1];
+        this.nodes[this.nodes.length - 1] = newNode;
+        return {oldNode: oldNode, newNode: newNode};
     }
 }

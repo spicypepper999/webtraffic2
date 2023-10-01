@@ -18,4 +18,15 @@ export class RoadNode extends BasicNode{
     get laneNodes(){
         return this._laneNodes;
     }
+    updateLaneNodeReference(oldNode, newNode){
+        for(let road of this.roads){
+            road.updateLaneNodeReference(oldNode, newNode);
+        }
+        //for of loop didnt work here with references
+        for(let i = 0; i < this.laneNodes.length; i++){
+            if(this.laneNodes[i] == oldNode){
+                this.laneNodes[i] = newNode;
+            }
+        }
+    }
 }
