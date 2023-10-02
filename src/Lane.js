@@ -54,7 +54,7 @@ export class Lane {
     }
     //Get coordinates and direction from given position.
     XYDirFromPosition(position) {
-        let node = new BasicNode(0,0);
+        const node = new BasicNode(0,0);
         let dir;
         //if position <= 0, sets coordinates to first node, pointing to second node
         if (position <= 0) {
@@ -77,7 +77,8 @@ export class Lane {
               let dy = (Math.sin(node.directionTo(this.nodes[i])) * distanceLeft);
               dx = node.x - dx;
               dy = node.y - dy;
-              node = new BasicNode(dx, dy);
+              node.x = dx;
+              node.y = dy;
               dir = Math.atan2(this.nodes[i].y - this.nodes[i-1].y, this.nodes[i].x - this.nodes[i-1].x);
               return {x: node.x, y: node.y, dir};
             }
@@ -128,7 +129,7 @@ export class Lane {
         return obstacles;
     }
     //returns old and new node so road can update its own references
-    createEndStop(){
+    convertEndStop(){
         const newNode = new LaneIntersectionNode(this.nodes[this.nodes.length - 1].x, this.nodes[this.nodes.length - 1].y, ["FULLSTOP"], this.nodes[this.nodes.length - 1].lanes);
         const oldNode = this.nodes[this.nodes.length - 1];
         this.nodes[this.nodes.length - 1] = newNode;

@@ -33,8 +33,8 @@ export class TrafficMap{
             }
             vehicle.move(delta);
         }
-        for(let intersection of this.intersections){
-            //intersection.tick(delta);
-        }
+        // for(let intersection of this.intersections){
+        //     //intersection.tick(delta);
+        // }
     }
 }

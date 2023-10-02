@@ -96,7 +96,8 @@ export class Vehicle {
         for (let i = 0; i < this.ruleset.length; i+=2) {
             const checkNode = this.ruleset[i];
             const nextLane = this.ruleset[i+1];
-            if (checkNode == this.lane.nodes[this.lane.nodes.length - 1]) {
+            console.log("");
+            if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
                 checkNode.transferVehicle(this, nextLane);
             }else{
                 this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);

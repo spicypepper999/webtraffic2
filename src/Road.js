@@ -40,7 +40,24 @@ export class Road{
         return this.nodes[0];
     }
     getEndNode(){
-        return this.nodes[this.nodes.length-1];
+        const node = this.nodes[this.nodes.length-1];
+        node.laneNodes.reverse();
+        return node;
+    }
+    getSourceLanes(){
+        const source = [];
+        for(let i = 0; i < (this.nodes.length / 2); i++){
+            source.push(this.nodes[i]);
+        }
+        return source;
+    }
+    getExitLanes(){
+        const exit = [];
+        for(let i = (this.nodes.length / 2); i < this.nodes.length; i++){
+            exit.push(this.nodes[i]);
+        }
+        exit.reverse();
+        return exit;
     }
     //add reference of self to nodes
     addSelfToNodes(){
@@ -115,7 +132,7 @@ export class Road{
     }
     convertEndStop(){
         for(let lane of this.lanes){
-            const nodes = lane.createEndStop();
+            const nodes = lane.convertEndStop();
             this.updateLaneNodeReference(nodes.oldNode, nodes.newNode);
         }
     }

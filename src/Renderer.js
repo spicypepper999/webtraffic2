@@ -13,6 +13,7 @@ import { LaneIntersectionNode } from "./LaneIntersectionNode.js";
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
 const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
+//const road1 = new Road([new RoadNode(400, 250), new RoadNode(250, 250), new RoadNode(100, 100)], 2, 50, "red");
 road1.convertEndStop();
 
 const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
@@ -25,11 +26,19 @@ road3.convertEndStop();
 const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
 
 
-const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].laneNodes[0], intersection1.lanes[0]]);
+const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
 const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 1, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
-const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].laneNodes[0], intersection1.lanes[0]]);
+const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
 
 const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1]);
+
+
+
+/////
+/////
+/////
+
+
 
 let nodes = [];
 //roads

@@ -15,7 +15,7 @@ export class LaneNode extends BasicNode{
         return false;
     }
     getStartLanes(){
-        let startLanes = [];
+        const startLanes = [];
         for(let lane of this.lanes){
             if(lane.positionOfNode(this) == 0){
                 startLanes.push(lane);

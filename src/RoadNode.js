@@ -29,4 +29,19 @@ export class RoadNode extends BasicNode{
             }
         }
     }
+    getSourceNodes(){
+        const intake = [];
+        for(let i = 0; i < (this.laneNodes.length / 2); i++){
+            intake.push(this.laneNodes[i]);
+        }
+        return intake;
+    }
+    getExitNodes(){
+        const exit = [];
+        for(let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++){
+            exit.push(this.laneNodes[i]);
+        }
+        exit.reverse();
+        return exit;
+    }
 }
