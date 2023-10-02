@@ -2,9 +2,9 @@ import { Lane } from "./Lane.js";
 import { LaneNode } from "./LaneNode.js";
 import { Vehicle } from "./Vehicle.js";
 
-export class LaneIntersectionNode extends LaneNode {
-    constructor(x, y, ruleset, lanes = []) {
-        super(x, y, lanes);
+export class IntersectionLaneNode extends LaneNode {
+    constructor(laneNode, ruleset) {
+        super(laneNode.x, laneNode.y, laneNode.lanes);
         this._ruleset = ruleset;
         this._currentCar = null;
         //this.updateLaneReferences();
@@ -21,11 +21,6 @@ export class LaneIntersectionNode extends LaneNode {
     get currentCar() {
         return this._currentCar;
     }
-    // updateLaneReferences(){
-    //     for(let lane of this.lanes){
-    //         lane.addSelfToNodes();
-    //     }
-    // }
     isObstacle(vehicle) {
         if (this.ruleset[0] == "STOP") {
             if (this.currentCar != null && !this.lanes.includes(this.currentCar.lane)) {

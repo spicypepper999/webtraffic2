@@ -8,23 +8,23 @@ import { Vehicle } from "./Vehicle.js";
 import { Road } from "./Road.js";
 import { RoadNode } from "./RoadNode.js";
 import { Intersection } from "./Intersection.js";
-import { LaneIntersectionNode } from "./LaneIntersectionNode.js";
+import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
+import { SpecialLaneNode } from "./SpecialLaneNode.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
 const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
 //const road1 = new Road([new RoadNode(400, 250), new RoadNode(250, 250), new RoadNode(100, 100)], 2, 50, "red");
-road1.convertEndStop();
 
 const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
 //const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 2, 50, "red");
-road2.convertEndStop();
+
+// const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], []);
+// road2.updateLaneNodeReference(road2.getEndNode().getExitNodes()[0], source1);
 
 const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
-road3.convertEndStop();
 
 const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
-
 
 const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
 const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 1, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
@@ -49,7 +49,7 @@ for (let road of map1.roads) {
                 let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
             }
             let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
-            if(lane.nodes[i] instanceof LaneIntersectionNode){
+            if(lane.nodes[i] instanceof IntersectionLaneNode){
                 nodes.push({ object: lane.nodes[i], sprite: laneNode });
             }
         }
@@ -67,7 +67,7 @@ for (let lane of map1.intersections[0].lanes) {
             let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
         }
         let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
-        if (lane.nodes[i] instanceof LaneIntersectionNode) {
+        if (lane.nodes[i] instanceof IntersectionLaneNode) {
             nodes.push({ object: lane.nodes[i], sprite: laneNode });
             if (lane.nodes[i].ruleset == "STOP" || lane.nodes[i].ruleset == "FULLSTOP") {
                 laneNode.fill = "RED";
@@ -75,6 +75,10 @@ for (let lane of map1.intersections[0].lanes) {
             if (lane.nodes[i].ruleset == "GO") {
                 laneNode.fill = "GREEN";
             }
+        }
+        if (lane.nodes[i] instanceof SpecialLaneNode) {
+            console.log("BBB");
+            laneNode.fill = "PURPLE";
         }
     }
 }

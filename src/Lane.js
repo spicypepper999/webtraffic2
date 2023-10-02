@@ -1,6 +1,6 @@
 import { BasicNode } from "./BasicNode.js";
 import { LaneNode } from "./LaneNode.js";
-import { LaneIntersectionNode } from "./LaneIntersectionNode.js";
+import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class Lane {
     constructor(nodes, speedLimit, color="red") {
@@ -130,7 +130,7 @@ export class Lane {
     }
     //returns old and new node so road can update its own references
     convertEndStop(){
-        const newNode = new LaneIntersectionNode(this.nodes[this.nodes.length - 1].x, this.nodes[this.nodes.length - 1].y, ["FULLSTOP"], this.nodes[this.nodes.length - 1].lanes);
+        const newNode = new IntersectionLaneNode(this.nodes[this.nodes.length - 1], ["FULLSTOP"]);
         const oldNode = this.nodes[this.nodes.length - 1];
         this.nodes[this.nodes.length - 1] = newNode;
         return {oldNode: oldNode, newNode: newNode};
