@@ -26,11 +26,6 @@ export class TrafficMap{
     }
     tick(delta){
         for(let vehicle of this.vehicles){
-            if(vehicle.returnObstacles(50).length == 0){
-                vehicle.accelerate();
-            }else{
-                vehicle.brake();
-            }
             vehicle.move(delta);
         }
         // for(let intersection of this.intersections){

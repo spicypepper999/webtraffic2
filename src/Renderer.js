@@ -26,9 +26,9 @@ const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new Road
 
 const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
 
-const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
-const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 1, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
-const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
+const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
+const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
+const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
 
 const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1]);
 
@@ -94,9 +94,6 @@ for (let vehicle of map1.vehicles) {
 two.bind('update', function () {
     map1.tick((two.timeDelta / 1000));
     for (let vehicle of vehicles) {
-        //does acceleration also need a timedelta meme? 
-        // vehicle.object.accelerate();
-        // vehicle.object.move((two.timeDelta / 1000));
         vehicle.sprite.position.set(vehicle.object.XYDir().x, vehicle.object.XYDir().y);
         vehicle.sprite.rotation = vehicle.object.XYDir().dir;
         vehicle.sprite.fill = vehicle.object.color;

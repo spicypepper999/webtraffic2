@@ -66,23 +66,31 @@ export class Vehicle {
         if (this.position >= this.lane.length()) {
             this.checkRuleset();
         }
-        if(this.lane.speedLimit < this.speed){
-            this.brake();
+        //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
+        if(this.lane.speedLimit < this.speed || this.returnObstacles(50).length > 0){
+            this.brake(delta);
+        }else if(this.lane.speedLimit > this.speed){
+            this.accelerate(delta);
         }
-        //console.log(this.position);
+        // else{
+        //     this.color = "black";
+        // }
     }
-    brake() {
+    brake(delta) {
         if (this.speed > 0) {
-            this.speed -= this.power;
+            this.speed -= (this.power * delta);
         }
-        if (this.speed <= 0) {
+        if (this.speed < 0) {
             this.speed = 0;
         }
         this.color = "red";
     }
-    accelerate() {
+    accelerate(delta) {
         if (this.speed < this.lane.speedLimit) {
-            this.speed += this.power;
+            this.speed += (this.power * delta);
+        }
+        if (this.speed > this.lane.speedLimit) {
+            this.speed = this.lane.speedLimit;
         }
         this.color = "green";
     }
