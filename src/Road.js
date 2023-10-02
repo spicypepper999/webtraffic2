@@ -36,6 +36,12 @@ export class Road{
     get color(){
         return this._color;
     }
+    getStartNode(){
+        return this.nodes[0];
+    }
+    getEndNode(){
+        return this.nodes[this.nodes.length-1];
+    }
     //add reference of self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){

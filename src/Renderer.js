@@ -22,13 +22,14 @@ road2.convertEndStop();
 const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
 road3.convertEndStop();
 
-const intersection1 = new Intersection(500, 300, "T", [road1.nodes[2], road2.nodes[0], road3.nodes[2]]);
+const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
 
 
 const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].laneNodes[0], intersection1.lanes[0]]);
-const car2 = new Vehicle(70, 1, road1.lanes[1], 0, 1, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
+const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 1, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
+const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 1, [intersection1.interfaceNodes[1].laneNodes[0], intersection1.lanes[0]]);
 
-const map1 = new TrafficMap([road1, road2, road3], [car1, car2], [intersection1]);
+const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1]);
 
 let nodes = [];
 //roads
