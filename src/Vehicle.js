@@ -78,7 +78,7 @@ export class Vehicle {
             this.brake(delta);
         } else if (this.lane.speedLimit > this.speed) {
             this.accelerate(delta);
-        }else{
+        } else {
             this.color = "black";
         }
     }
@@ -101,50 +101,58 @@ export class Vehicle {
         this.color = "green";
     }
     returnObstacles(distance) {
-        return this.lane.returnObstacles(this.position, distance, this);
+        const obstacles = [];
+        obstacles.push(...this.lane.returnObstacles(this.position, distance, this));
+        const distanceLeft = this.position + distance - this.lane.length();
+        const nextLane = this.getNextLane();
+        if (nextLane != null && distanceLeft > 0) {
+            obstacles.push(...nextLane.returnObstacles(0, distanceLeft, this));
+        }
+        return obstacles;
     }
     isObstacle() {
         return true;
     }
     checkRuleset() {
         if (this.ruleset.length == 0) {
-            this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+            this.lane.lastNode().transferVehicle(this, this.lane.nodes[this.lane.lastNode().getStartLanes()[0]]);
         } else {
             for (let i = 0; i < this.ruleset.length; i += 2) {
                 const checkNode = this.ruleset[i];
                 const nextLane = this.ruleset[i + 1];
-                if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
+                if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(nextLane)) {
                     checkNode.transferVehicle(this, nextLane);
                 } else {
-                    this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+                    this.lane.lastNode().transferVehicle(this, this.lane.lastNode().getStartLanes()[0]);
                 }
             }
         }
     }
-    getNextLane(){
-        if(this.ruleset.length == 0){
-            if(this.lane.nodes[this.lane.nodes.length - 1].getStartLanes().length > 0){
-                return this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0];
-            }else{
+    getNextLane() {
+        const lastNode = this.lane.lastNode();
+        if (this.ruleset.length == 0) {
+            if (lastNode.getStartLanes().length > 0) {
+                return lastNode.getStartLanes()[0];
+            } else {
                 return null;
             }
-        }else{
+        } else {
             for (let i = 0; i < this.ruleset.length; i += 2) {
-                    const checkNode = this.ruleset[i];
-                    const nextLane = this.ruleset[i + 1];
-                    if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
-                        return nextLane;
+                const checkNode = this.ruleset[i];
+                const nextLane = this.ruleset[i + 1];
+                if (checkNode == lastNode && checkNode.lanes.includes(nextLane)) {
+                    return nextLane;
+                } else {
+                    if (lastNode.getStartLanes().length > 0) {
+                        return lastNode.getStartLanes()[0];
                     } else {
-                        if(this.lane.nodes[this.lane.nodes.length - 1].getStartLanes().length > 0){
-                            return this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0];
-                        }else{
-                            return null;
-                        }
+                        return null;
                     }
                 }
+            }
         }
     }
-    updateSprite(){
+    updateSprite() {
         const XYDir = this.XYDir();
         this.sprite.position.set(XYDir.x, XYDir.y);
         this.sprite.rotation = XYDir.dir;

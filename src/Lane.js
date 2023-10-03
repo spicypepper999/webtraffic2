@@ -34,6 +34,9 @@ export class Lane {
     get vehicles() {
         return this._vehicles;
     }
+    lastNode(){
+        return this.nodes[this.nodes.length-1];
+    }
     //add reference of self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){
@@ -64,8 +67,8 @@ export class Lane {
         }
         //if position > total length, sets coordinates to last node, pointing from second-to-last node to last node
         if (position > this.length()) {
-            node.setToNode(this.nodes[this.nodes.length - 1]);
-            dir = Math.atan2(this.nodes[this.nodes.length - 1].y - this.nodes[this.nodes.length - 2].y, this.nodes[this.nodes.length - 1].x - this.nodes[this.nodes.length - 2].y);
+            node.setToNode(this.lastNode());
+            dir = Math.atan2(this.lastNode().y - this.nodes[this.nodes.length - 2].y, this.lastNode().x - this.nodes[this.nodes.length - 2].y);
             return {x: node.x, y: node.y, dir};
         }
         //otherwise, go along lane and calculate coordinates/direction
@@ -116,15 +119,6 @@ export class Lane {
                 obstacles.push(node);
             }
         }
-        //console.log(obstacles);
-        if(vehicle != null && vehicle.getNextLane() != null && (vehicle.position + distance) > (vehicle.lane.positionOfNode(vehicle.lane.nodes[vehicle.lane.nodes.length - 1]))){
-            let distanceLeft = (vehicle.position + distance) - (vehicle.lane.positionOfNode(vehicle.lane.nodes[vehicle.lane.nodes.length - 1]));
-            const newObstacles = vehicle.getNextLane().returnObstacles(0, distanceLeft, vehicle);
-            if(newObstacles.length > 0){
-            obstacles.push(newObstacles);
-            }
-        }
-
         return obstacles;
     }
     returnVehicles(position, distance){
@@ -138,8 +132,8 @@ export class Lane {
     }
     //returns old and new node so road can update its own references
     convertEndStop(){
-        const newNode = new IntersectionLaneNode(this.nodes[this.nodes.length - 1], ["FULLSTOP"]);
-        const oldNode = this.nodes[this.nodes.length - 1];
+        const newNode = new IntersectionLaneNode(this.lastNode(), ["FULLSTOP"]);
+        const oldNode = this.lastNode();
         this.nodes[this.nodes.length - 1] = newNode;
         return {oldNode: oldNode, newNode: newNode};
     }
