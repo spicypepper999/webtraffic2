@@ -10,7 +10,7 @@ export class Intersection{
         this._lanes = [];
         this._type = type;
         this.generateIntersection(type);
-        this._timePassed = 0;
+        this._timer = 0;
     }
     set type(value){
         this._type = value;
@@ -36,11 +36,11 @@ export class Intersection{
     get lanes(){
         return this._lanes;
     }
-    set timePassed(value){
-        this._timePassed = value;
+    set timer(value){
+        this._timer = value;
     }
-    get timePassed(){
-        return this._timePassed;
+    get timer(){
+        return this._timer;
     }
     generateIntersection(type){
         if(type == "T"){

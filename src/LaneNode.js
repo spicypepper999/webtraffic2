@@ -25,7 +25,7 @@ export class LaneNode extends BasicNode{
     }
     transferVehicle(vehicle, nextLane) {
         if (this.lanes.includes(nextLane) && this.lanes.includes(vehicle.lane)) {
-            if (vehicle.position >= vehicle.lane.positionOfNode(this)) {
+            if (vehicle.position > vehicle.lane.positionOfNode(this)) {
                 vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
                 vehicle.lane = nextLane;
                 vehicle.lane.vehicles.push(vehicle);

@@ -1,10 +1,11 @@
 import { Lane } from "./Lane.js"
 
 export class TrafficMap{
-    constructor(roads, vehicles, intersections){
+    constructor(roads, vehicles, intersections, specialNodes){
         this._roads = roads;
         this._vehicles = vehicles;
         this._intersections = intersections;
+        this._specialNodes = specialNodes;
     }
     set roads(value) {
         this._roads = value;
@@ -24,12 +25,23 @@ export class TrafficMap{
     get intersections() {
         return this._intersections;
     }
+    set specialNodes(value) {
+        this._specialNodes = value;
+    }
+    get specialNodes() {
+        return this._specialNodes;
+    }
     tick(delta){
+        let event;
         for(let vehicle of this.vehicles){
             vehicle.move(delta);
+        }
+        for(let specialNode of this.specialNodes){
+            event = specialNode.tick(delta, this);
         }
         // for(let intersection of this.intersections){
         //     //intersection.tick(delta);
         // }
+        return {event: event}
     }
 }

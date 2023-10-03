@@ -2,7 +2,7 @@ import { Lane } from "./Lane.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class Vehicle {
-    constructor(position, direction, lane, speed, power, ruleset) {
+    constructor(position, direction, lane, speed, power, ruleset, sprite) {
         this._position = position;
         this._direction = direction;
         this._lane = lane;
@@ -11,6 +11,7 @@ export class Vehicle {
         this._ruleset = ruleset;
         this._color = "black";
         this._lane.vehicles.push(this);
+        this._sprite = sprite;
     }
     set position(value) {
         this._position = value;
@@ -54,6 +55,12 @@ export class Vehicle {
     get color() {
         return this._color;
     }
+    set sprite(value) {
+        this._sprite = value;
+    }
+    get sprite() {
+        return this._sprite;
+    }
     XYDir() {
         let XYDir = this.lane.XYDirFromPosition(this.position);
         if (this.direction == -1) {
@@ -63,18 +70,17 @@ export class Vehicle {
     }
     move(delta) {
         this.position += (this.speed * this.direction * delta);
-        if (this.position >= this.lane.length()) {
+        if (this.position > this.lane.length()) {
             this.checkRuleset();
         }
         //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
-        if(this.lane.speedLimit < this.speed || this.returnObstacles(50).length > 0){
+        if (this.lane.speedLimit < this.speed || this.returnObstacles(50).length > 0) {
             this.brake(delta);
-        }else if(this.lane.speedLimit > this.speed){
+        } else if (this.lane.speedLimit > this.speed) {
             this.accelerate(delta);
+        }else{
+            this.color = "black";
         }
-        // else{
-        //     this.color = "black";
-        // }
     }
     brake(delta) {
         if (this.speed > 0) {
@@ -101,14 +107,47 @@ export class Vehicle {
         return true;
     }
     checkRuleset() {
-        for (let i = 0; i < this.ruleset.length; i+=2) {
-            const checkNode = this.ruleset[i];
-            const nextLane = this.ruleset[i+1];
-            if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
-                checkNode.transferVehicle(this, nextLane);
-            }else{
-                this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+        if (this.ruleset.length == 0) {
+            this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+        } else {
+            for (let i = 0; i < this.ruleset.length; i += 2) {
+                const checkNode = this.ruleset[i];
+                const nextLane = this.ruleset[i + 1];
+                if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
+                    checkNode.transferVehicle(this, nextLane);
+                } else {
+                    this.lane.nodes[this.lane.nodes.length - 1].transferVehicle(this, this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0]);
+                }
             }
         }
+    }
+    getNextLane(){
+        if(this.ruleset.length == 0){
+            if(this.lane.nodes[this.lane.nodes.length - 1].getStartLanes().length > 0){
+                return this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0];
+            }else{
+                return null;
+            }
+        }else{
+            for (let i = 0; i < this.ruleset.length; i += 2) {
+                    const checkNode = this.ruleset[i];
+                    const nextLane = this.ruleset[i + 1];
+                    if (checkNode == this.lane.nodes[this.lane.nodes.length - 1] && checkNode.lanes.includes(nextLane)) {
+                        return nextLane;
+                    } else {
+                        if(this.lane.nodes[this.lane.nodes.length - 1].getStartLanes().length > 0){
+                            return this.lane.nodes[this.lane.nodes.length - 1].getStartLanes()[0];
+                        }else{
+                            return null;
+                        }
+                    }
+                }
+        }
+    }
+    updateSprite(){
+        const XYDir = this.XYDir();
+        this.sprite.position.set(XYDir.x, XYDir.y);
+        this.sprite.rotation = XYDir.dir;
+        this.sprite.fill = this.color;
     }
 }

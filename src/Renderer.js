@@ -19,18 +19,20 @@ const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new Road
 const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
 //const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 2, 50, "red");
 
-// const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], []);
-// road2.updateLaneNodeReference(road2.getEndNode().getExitNodes()[0], source1);
+//const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], []);
 
 const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
 
 const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
 
-const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
-const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]]);
-const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]]);
+const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], ["source", [0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 0, 0)], 1]);
+road2.updateLaneNodeReference(road2.getEndNode().getSourceNodes()[0], source1);
 
-const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1]);
+const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
+const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]], two.makeRectangle(0, 0, 10, 10));
+const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
+
+const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1], [source1]);
 
 
 
@@ -52,6 +54,9 @@ for (let road of map1.roads) {
             if(lane.nodes[i] instanceof IntersectionLaneNode){
                 nodes.push({ object: lane.nodes[i], sprite: laneNode });
             }
+            if(lane.nodes[i] instanceof SpecialLaneNode){
+                laneNode.fill = "purple";
+            }
         }
     }
     for (let node of road.nodes) {
@@ -69,34 +74,19 @@ for (let lane of map1.intersections[0].lanes) {
         let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
         if (lane.nodes[i] instanceof IntersectionLaneNode) {
             nodes.push({ object: lane.nodes[i], sprite: laneNode });
-            if (lane.nodes[i].ruleset == "STOP" || lane.nodes[i].ruleset == "FULLSTOP") {
-                laneNode.fill = "RED";
-            }
-            if (lane.nodes[i].ruleset == "GO") {
-                laneNode.fill = "GREEN";
-            }
-        }
-        if (lane.nodes[i] instanceof SpecialLaneNode) {
-            console.log("BBB");
-            laneNode.fill = "PURPLE";
         }
     }
 }
 
-//vehicles
-let vehicles = [];
-for (let vehicle of map1.vehicles) {
-    let newVehicle = two.makeRectangle(vehicle.XYDir().x, vehicle.XYDir().y, 10, 10);
-    newVehicle.rotation = vehicle.XYDir().dir;
-    vehicles.push({ object: vehicle, sprite: newVehicle });
-}
+//
+//
+//
+//
 
 two.bind('update', function () {
-    map1.tick((two.timeDelta / 1000));
-    for (let vehicle of vehicles) {
-        vehicle.sprite.position.set(vehicle.object.XYDir().x, vehicle.object.XYDir().y);
-        vehicle.sprite.rotation = vehicle.object.XYDir().dir;
-        vehicle.sprite.fill = vehicle.object.color;
+    const events = map1.tick((two.timeDelta / 1000));
+    for (let vehicle of map1.vehicles) {
+        vehicle.updateSprite();
     }
     for (let node of nodes) {
         if (node.object.ruleset[0] == "STOP" || node.object.ruleset[0] == "FULLSTOP") {
@@ -108,5 +98,10 @@ two.bind('update', function () {
         if (node.object.ruleset[0] == "YIELD") {
             node.sprite.fill = "YELLOW";
         }
+    }
+    //STINKY!!!!
+    if(events.event != undefined){
+        two.remove(map1.vehicles[map1.vehicles.length-1].sprite);
+        map1.vehicles[map1.vehicles.length-1].sprite = two.makeRectangle(0,0, 10, 10);
     }
 });

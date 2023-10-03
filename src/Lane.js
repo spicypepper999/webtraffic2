@@ -104,7 +104,7 @@ export class Lane {
     reverse(){
         this.nodes.reverse();
     }
-    returnObstacles(position, distance, vehicle){
+    returnObstacles(position, distance, vehicle = null){
         const obstacles = [];
         for(let vehicle2 of this.vehicles){
             if((vehicle != vehicle2) && ((vehicle2.position - position) <= distance) && ((vehicle2.position - position) >= 0)){
@@ -117,6 +117,14 @@ export class Lane {
             }
         }
         //console.log(obstacles);
+        if(vehicle != null && vehicle.getNextLane() != null && (vehicle.position + distance) > (vehicle.lane.positionOfNode(vehicle.lane.nodes[vehicle.lane.nodes.length - 1]))){
+            let distanceLeft = (vehicle.position + distance) - (vehicle.lane.positionOfNode(vehicle.lane.nodes[vehicle.lane.nodes.length - 1]));
+            const newObstacles = vehicle.getNextLane().returnObstacles(0, distanceLeft, vehicle);
+            if(newObstacles.length > 0){
+            obstacles.push(newObstacles);
+            }
+        }
+
         return obstacles;
     }
     returnVehicles(position, distance){
