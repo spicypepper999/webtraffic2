@@ -45,36 +45,36 @@ export class Intersection{
     generateIntersection(type){
         if(type == "T"){
 
-            const newIntersection1 = new IntersectionLaneNode(this.interfaceNodes[0].getSourceNodes()[0], ["GO"]);
-            this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getSourceNodes()[0], newIntersection1);
+            const newIntersection1 = new IntersectionLaneNode(this.interfaceNodes[0].getSourceNodesNormalized()[0], ["GO"]);
+            this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getSourceNodesNormalized()[0], newIntersection1);
             this.intersectionNodes.push(newIntersection1);
 
-            const newIntersection2 = new IntersectionLaneNode(this.interfaceNodes[0].getExitNodes()[0], ["GO"]);
-            this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getExitNodes()[0], newIntersection2);
+            const newIntersection2 = new IntersectionLaneNode(this.interfaceNodes[0].getExitNodesNormalized()[0], ["GO"]);
+            this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getExitNodesNormalized()[0], newIntersection2);
             this.intersectionNodes.push(newIntersection2);
 
-            const newIntersection3 = new IntersectionLaneNode(this.interfaceNodes[1].getSourceNodes()[0], ["YIELD"]);
-            this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getSourceNodes()[0], newIntersection3);
+            const newIntersection3 = new IntersectionLaneNode(this.interfaceNodes[1].getSourceNodesNormalized()[0], ["YIELD"]);
+            this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getSourceNodesNormalized()[0], newIntersection3);
             this.intersectionNodes.push(newIntersection3);
 
-            const newIntersection4 = new IntersectionLaneNode(this.interfaceNodes[1].getExitNodes()[0], ["GO"]);
-            this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getExitNodes()[0], newIntersection4);
+            const newIntersection4 = new IntersectionLaneNode(this.interfaceNodes[1].getExitNodesNormalized()[0], ["GO"]);
+            this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getExitNodesNormalized()[0], newIntersection4);
             this.intersectionNodes.push(newIntersection4);
 
-            const newIntersection5 = new IntersectionLaneNode(this.interfaceNodes[2].getSourceNodes()[0], ["GO"]);
-            this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getSourceNodes()[0], newIntersection5);
+            const newIntersection5 = new IntersectionLaneNode(this.interfaceNodes[2].getSourceNodesNormalized()[0], ["GO"]);
+            this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getSourceNodesNormalized()[0], newIntersection5);
             this.intersectionNodes.push(newIntersection5);
 
-            const newIntersection6 = new IntersectionLaneNode(this.interfaceNodes[2].getExitNodes()[0], ["GO"]);
-            this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getExitNodes()[0], newIntersection6);
+            const newIntersection6 = new IntersectionLaneNode(this.interfaceNodes[2].getExitNodesNormalized()[0], ["GO"]);
+            this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getExitNodesNormalized()[0], newIntersection6);
             this.intersectionNodes.push(newIntersection6);
 
-             this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodes()[0], this.interfaceNodes[1].getExitNodes()[0]], 40));
-             this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodes()[0], this.interfaceNodes[2].getExitNodes()[0]], 40));
-             this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodes()[0], this.interfaceNodes[0].getExitNodes()[0]], 40));
-              this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodes()[0], this.interfaceNodes[2].getExitNodes()[0]], 40));
-              this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodes()[0], this.interfaceNodes[0].getExitNodes()[0]], 40));
-              this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodes()[0], this.interfaceNodes[1].getExitNodes()[0]], 40));
+             this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
+             this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[2].getExitNodesNormalized()[0]], 40));
+             this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[0], this.interfaceNodes[0].getExitNodesNormalized()[0]], 40));
+              this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[0], this.interfaceNodes[2].getExitNodesNormalized()[0]], 40));
+              this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[0], this.interfaceNodes[0].getExitNodesNormalized()[0]], 40));
+              this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
 
             newIntersection3.ruleset = ["YIELD", this.lanes[0], 60];
         }

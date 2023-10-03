@@ -13,23 +13,26 @@ import { SpecialLaneNode } from "./SpecialLaneNode.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
-const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
+const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 4, 50, "red");
 //const road1 = new Road([new RoadNode(400, 250), new RoadNode(250, 250), new RoadNode(100, 100)], 2, 50, "red");
 
-const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
-//const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 2, 50, "red");
+const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 4, 50, "red");
+//const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 4, 50, "red");
 
-//const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], []);
+//const source1 = new SpecialLaneNode(road2.lastNode().getExitNodes()[0], []);
 
-const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
+const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 4, 50, "red");
 
-const intersection1 = new Intersection(500, 300, "T", [road1.getEndNode(), road2.getStartNode(), road3.getEndNode()]);
+const intersection1 = new Intersection(500, 300, "T", [road1.lastNode(), road2.firstNode(), road3.lastNode()]);
 
-const source1 = new SpecialLaneNode(road2.getEndNode().getExitNodes()[0], ["source", [0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 0, 0)], 1]);
-road2.updateLaneNodeReference(road2.getEndNode().getSourceNodes()[0], source1);
+
+//why
+const source1 = new SpecialLaneNode(road2.lastNode().getSourceNodes()[0], ["source", [0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 0, 0)], 1]);
+road2.updateLaneNodeReference(road2.lastNode().getSourceNodes()[0], source1);
+//const exit1 = new SpecialLaneNode()
 
 const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
-const car2 = new Vehicle(150, 1, road1.lanes[1], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]], two.makeRectangle(0, 0, 10, 10));
+const car2 = new Vehicle(150, 1, road1.lanes[3], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]], two.makeRectangle(0, 0, 10, 10));
 const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
 
 const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1], [source1]);

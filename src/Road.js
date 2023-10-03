@@ -37,13 +37,11 @@ export class Road{
     get color(){
         return this._color;
     }
-    getStartNode(){
+    firstNode(){
         return this.nodes[0];
     }
-    getEndNode(){
-        const node = this.nodes[this.nodes.length-1];
-        node.laneNodes.reverse();
-        return node;
+    lastNode(){
+        return this.nodes[this.nodes.length-1];
     }
     getSourceLanes(){
         const source = [];
@@ -63,8 +61,8 @@ export class Road{
     //add reference of self to nodes
     addSelfToNodes(){
         for(let node of this.nodes){
-            if(node instanceof RoadNode && !node.roads.includes(this)){
-                node.roads.push(this);
+            if(node instanceof RoadNode && node.road != this){
+                node.road = this;
             }
         }
     }
