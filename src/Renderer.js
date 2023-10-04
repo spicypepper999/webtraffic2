@@ -19,8 +19,6 @@ const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new Road
 const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 4, 50, "red");
 //const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 4, 50, "red");
 
-//const source1 = new SpecialLaneNode(road2.lastNode().getExitNodes()[0], []);
-
 const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 4, 50, "red");
 
 const intersection1 = new Intersection(500, 300, "T", [road1.lastNode(), road2.firstNode(), road3.lastNode()]);
