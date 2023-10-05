@@ -17,20 +17,19 @@ export class LaneNode extends BasicNode {
     getStartLanes() {
         const startLanes = [];
         for (let lane of this.lanes) {
-            if (lane.positionOfNode(this) == 0) {
+            if (lane.nodes[0] == this) {
                 startLanes.push(lane);
             }
         }
         return startLanes;
     }
-    transferVehicle(vehicle, nextLane) {
-        if (this.lanes.includes(nextLane) && this.lanes.includes(vehicle.lane)) {
-            if (vehicle.position > vehicle.lane.positionOfNode(this)) {
-                vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
-                vehicle.lane = nextLane;
-                vehicle.lane.vehicles.push(vehicle);
-                vehicle.position = vehicle.lane.positionOfNode(this);
+    transferVehicle(vehicle, nextLane = null) {
+            if (!this.lanes.includes(nextLane) || !this.lanes.includes(vehicle.lane)) {
+                nextLane = this.getStartLanes()[0];
             }
-        }
+            vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
+            vehicle.lane = nextLane;
+            vehicle.position = nextLane.positionOfNode(this);
+            nextLane.vehicles.push(vehicle);
     }
 }
