@@ -32,18 +32,24 @@ export class TrafficMap {
     get specialNodes() {
         return this._specialNodes;
     }
+    deleteVehicle(vehicle){
+        vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
+        this.vehicles.splice(this.vehicles.indexOf(vehicle), 1);
+    }
     tick(delta) {
-        let event;
-        let event2;
+        const event = [];
         for (let vehicle of this.vehicles) {
             vehicle.move(delta);
         }
         for (let specialNode of this.specialNodes) {
-            event = specialNode.tick(delta, this);
+            const nodeEvent = specialNode.tick(delta, this);
+            if (nodeEvent != undefined) {
+                event.push(nodeEvent);
+            }
         }
         // for(let intersection of this.intersections){
         //     //intersection.tick(delta);
         // }
-        return { event, event2 }
+        return event;
     }
 }

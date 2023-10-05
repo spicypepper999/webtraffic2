@@ -61,9 +61,12 @@ export class Vehicle {
     get sprite() {
         return this._sprite;
     }
+
+    //i dont think this works properly
     getStoppingDistance() {
         return ((this.speed ** 2) / (2 * this.power));
     }
+    
     XYDir() {
         let XYDir = this.lane.XYDirFromPosition(this.position);
         if (this.direction == -1) {
