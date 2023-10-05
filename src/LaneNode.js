@@ -1,23 +1,23 @@
 import { BasicNode } from "./BasicNode.js"
 
-export class LaneNode extends BasicNode{
-    constructor(x, y, lanes=[]){
+export class LaneNode extends BasicNode {
+    constructor(x, y, lanes = []) {
         super(x, y);
         this._lanes = lanes;
     }
-    set lanes(value){
+    set lanes(value) {
         this._lanes = value;
     }
-    get lanes(){
+    get lanes() {
         return this._lanes;
     }
     isObstacle() {
         return false;
     }
-    getStartLanes(){
+    getStartLanes() {
         const startLanes = [];
-        for(let lane of this.lanes){
-            if(lane.positionOfNode(this) == 0){
+        for (let lane of this.lanes) {
+            if (lane.positionOfNode(this) == 0) {
                 startLanes.push(lane);
             }
         }

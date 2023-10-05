@@ -34,22 +34,6 @@ export class RoadNode extends BasicNode {
         }
         return intake;
     }
-    getExitNodes() {
-        const exit = [];
-        for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
-            exit.push(this.laneNodes[i]);
-        }
-        exit.reverse();
-        return exit;
-    }
-
-    getSourceNodes() {
-        const intake = [];
-        for (let i = 0; i < (this.laneNodes.length / 2); i++) {
-            intake.push(this.laneNodes[i]);
-        }
-        return intake;
-    }
 
     getExitNodes() {
         const exit = [];
@@ -63,20 +47,20 @@ export class RoadNode extends BasicNode {
     //high potency and high yield autismo code down here
 
     getSourceNodesNormalized() {
-        if(this.road.lastNode() == this){
+        if (this.road.lastNode() == this) {
             this.laneNodes.reverse();
         }
         const intake = [];
         for (let i = 0; i < (this.laneNodes.length / 2); i++) {
             intake.push(this.laneNodes[i]);
         }
-        if(this.road.lastNode() == this){
+        if (this.road.lastNode() == this) {
             this.laneNodes.reverse();
         }
         return intake;
     }
     getExitNodesNormalized() {
-        if(this.road.lastNode() == this){
+        if (this.road.lastNode() == this) {
             this.laneNodes.reverse();
         }
         const exit = [];
@@ -84,7 +68,7 @@ export class RoadNode extends BasicNode {
             exit.push(this.laneNodes[i]);
         }
         exit.reverse();
-        if(this.road.lastNode() == this){
+        if (this.road.lastNode() == this) {
             this.laneNodes.reverse();
         }
         return exit;

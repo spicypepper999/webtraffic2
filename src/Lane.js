@@ -137,4 +137,26 @@ export class Lane {
         this.nodes[this.nodes.length - 1] = newNode;
         return {oldNode: oldNode, newNode: newNode};
     }
+    //troll face code
+    findIntersectPosition(lane){
+        const thisLength = this.length();
+        const nextLength = lane.length();
+
+        let thisPosition = 0;
+        let nextPosition = 0;
+        let minDistance = thisLength + nextLength;
+        for(let i = 0; i < thisLength; i++){
+            const thisCoord = this.XYDirFromPosition(i);
+            for(let j = 0; j < nextLength; j++){
+                const nextCoord = lane.XYDirFromPosition(j);
+                const distance =  Math.sqrt(((thisCoord.x - nextCoord.x)**2)+((thisCoord.y - nextCoord.y)**2));
+                if(distance < minDistance){
+                    minDistance = distance;
+                    thisPosition = i;
+                    nextPosition = j;
+                }
+            }
+        }
+        return {thisPosition, nextPosition};
+    }
 }

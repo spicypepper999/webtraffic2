@@ -13,27 +13,30 @@ import { SpecialLaneNode } from "./SpecialLaneNode.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
-const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 4, 50, "red");
+const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
 //const road1 = new Road([new RoadNode(400, 250), new RoadNode(250, 250), new RoadNode(100, 100)], 2, 50, "red");
 
-const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 4, 50, "red");
-//const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 4, 50, "red");
+//const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
+const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 2, 50, "red");
 
-const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 4, 50, "red");
+const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
 
-const intersection1 = new Intersection(500, 300, "T", [road1.lastNode(), road2.firstNode(), road3.lastNode()]);
+const intersection1 = new Intersection(500, 300, "T", [road1.lastNode(), road2.lastNode(), road3.lastNode()]);
 
 
 //why
-const source1 = new SpecialLaneNode(road2.lastNode().getSourceNodes()[0], ["source", [0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 0, 0)], 1]);
-road2.updateLaneNodeReference(road2.lastNode().getSourceNodes()[0], source1);
+const source1 = new SpecialLaneNode(road2.firstNode().getExitNodes()[0], ["source", [0, 1, road2.lanes[1], 0, 100, ["direction", intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 0, 0)], 1]);
+road2.updateLaneNodeReference(road2.firstNode().getExitNodes()[0], source1);
+
+const source2 = new SpecialLaneNode(road1.firstNode().getSourceNodes()[0], ["exit", road1.lanes[1], 100, 2]);
+road1.updateLaneNodeReference(road1.firstNode().getSourceNodes()[0], source2);
 //const exit1 = new SpecialLaneNode()
 
 const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
-const car2 = new Vehicle(150, 1, road1.lanes[3], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]], two.makeRectangle(0, 0, 10, 10));
+const car2 = new Vehicle(120, 1, road1.lanes[1], 0, 100, [intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[2]], two.makeRectangle(0, 0, 10, 10));
 const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, [intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
 
-const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1], [source1]);
+const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1], [source1, source2]);
 
 
 
@@ -52,10 +55,10 @@ for (let road of map1.roads) {
                 let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
             }
             let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
-            if(lane.nodes[i] instanceof IntersectionLaneNode){
+            if (lane.nodes[i] instanceof IntersectionLaneNode) {
                 nodes.push({ object: lane.nodes[i], sprite: laneNode });
             }
-            if(lane.nodes[i] instanceof SpecialLaneNode){
+            if (lane.nodes[i] instanceof SpecialLaneNode) {
                 laneNode.fill = "purple";
             }
         }
@@ -85,6 +88,11 @@ for (let lane of map1.intersections[0].lanes) {
 //
 
 two.bind('update', function () {
+    //
+    //
+    document.querySelector("#nums").innerHTML = mousePosition[0] + " " + mousePosition[1];
+    //
+    //
     const events = map1.tick((two.timeDelta / 1000));
     for (let vehicle of map1.vehicles) {
         vehicle.updateSprite();
@@ -101,8 +109,18 @@ two.bind('update', function () {
         }
     }
     //STINKY!!!!
-    if(events.event != undefined){
-        two.remove(map1.vehicles[map1.vehicles.length-1].sprite);
-        map1.vehicles[map1.vehicles.length-1].sprite = two.makeRectangle(0,0, 10, 10);
+    if (events.event != undefined) {
+        two.remove(map1.vehicles[map1.vehicles.length - 1].sprite);
+        map1.vehicles[map1.vehicles.length - 1].sprite = two.makeRectangle(0, 0, 10, 10);
     }
+});
+
+//
+//
+//
+//
+
+let mousePosition = [];
+addEventListener("mousemove", (ev) => {
+    mousePosition = [ev.x, ev.y];
 });

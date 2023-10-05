@@ -61,6 +61,9 @@ export class Vehicle {
     get sprite() {
         return this._sprite;
     }
+    getStoppingDistance() {
+        return ((this.speed ** 2) / (2 * this.power));
+    }
     XYDir() {
         let XYDir = this.lane.XYDirFromPosition(this.position);
         if (this.direction == -1) {
@@ -117,37 +120,40 @@ export class Vehicle {
         if (this.ruleset.length == 0) {
             this.lane.lastNode().transferVehicle(this, this.lane.nodes[this.lane.lastNode().getStartLanes()[0]]);
         } else {
-            for (let i = 0; i < this.ruleset.length; i += 2) {
-                const checkNode = this.ruleset[i];
-                const nextLane = this.ruleset[i + 1];
-                if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(nextLane)) {
-                    checkNode.transferVehicle(this, nextLane);
+            for (let i = 0; i < this.ruleset.length; i++) {
+                if (this.ruleset[i] == "direction") {
+                    const checkNode = this.ruleset[i + 1];
+                    const nextLane = this.ruleset[i + 2];
+                    if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(nextLane)) {
+                        checkNode.transferVehicle(this, nextLane);
+                    } else {
+                        this.lane.lastNode().transferVehicle(this, this.lane.lastNode().getStartLanes()[0]);
+                    }
+                    i += 3;
                 } else {
                     this.lane.lastNode().transferVehicle(this, this.lane.lastNode().getStartLanes()[0]);
                 }
             }
         }
     }
+
     getNextLane() {
         const lastNode = this.lane.lastNode();
         if (this.ruleset.length == 0) {
-            if (lastNode.getStartLanes().length > 0) {
-                return lastNode.getStartLanes()[0];
-            } else {
-                return null;
-            }
+            return lastNode.getStartLanes()[0];
         } else {
-            for (let i = 0; i < this.ruleset.length; i += 2) {
-                const checkNode = this.ruleset[i];
-                const nextLane = this.ruleset[i + 1];
-                if (checkNode == lastNode && checkNode.lanes.includes(nextLane)) {
-                    return nextLane;
-                } else {
-                    if (lastNode.getStartLanes().length > 0) {
-                        return lastNode.getStartLanes()[0];
+            for (let i = 0; i < this.ruleset.length; i++) {
+                if (this.ruleset[i] == "direction") {
+                    const checkNode = this.ruleset[i + 1];
+                    const nextLane = this.ruleset[i + 2];
+                    if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(nextLane)) {
+                        return nextLane;
                     } else {
-                        return null;
+                        return lastNode.getStartLanes()[0];
                     }
+                    i += 3;
+                } else {
+                    return lastNode.getStartLanes()[0];
                 }
             }
         }

@@ -42,8 +42,7 @@ export class IntersectionLaneNode extends LaneNode {
             if (vehicle.lane == this.ruleset[1]) {
                 return false;
             } else {
-                //IMPORTANT!!!!! I AM MANUALLY SETTING DISTANCE RN!!! STINKY!!!!
-                if (this.ruleset[1].returnVehicles(this.ruleset[2], 100).length == 0) {
+                if (this.ruleset[1].returnVehicles(this.ruleset[2], this.ruleset[3]).length == 0 || this.ruleset[4] == vehicle.getNextLane()) {
                     return false;
                 } else {
                     return true;
