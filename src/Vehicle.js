@@ -64,7 +64,10 @@ export class Vehicle {
 
     //i dont think this works properly
     getStoppingDistance() {
-        return ((this.speed ** 2) / (2 * this.power));
+        return ((this.speed ** 2) / (this.power * 2));
+    }
+    getLaneStoppingDistance(){
+        return ((this.lane.speedLimit ** 2) / (this.power * 2));
     }
 
     XYDir() {
@@ -79,7 +82,7 @@ export class Vehicle {
             this.lane.lastNode().transferVehicle(this, this.getNextLane());;
         }
         //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
-        if (this.lane.speedLimit < this.speed || this.returnObstacles(50).length > 0) {
+        if (this.lane.speedLimit < this.speed || this.returnObstacles(this.getLaneStoppingDistance() + 50).length > 0) {
             this.brake(delta);
         } else if (this.lane.speedLimit > this.speed) {
             this.accelerate(delta);

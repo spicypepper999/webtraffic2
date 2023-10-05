@@ -27,7 +27,7 @@ export class RoadNode extends BasicNode {
             }
         }
     }
-    getSourceNodes() {
+    getExitNodes() {
         const intake = [];
         for (let i = 0; i < (this.laneNodes.length / 2); i++) {
             intake.push(this.laneNodes[i]);
@@ -35,7 +35,7 @@ export class RoadNode extends BasicNode {
         return intake;
     }
 
-    getExitNodes() {
+    getSourceNodes() {
         const exit = [];
         for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
             exit.push(this.laneNodes[i]);
