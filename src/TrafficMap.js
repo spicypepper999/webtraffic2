@@ -32,9 +32,28 @@ export class TrafficMap {
     get specialNodes() {
         return this._specialNodes;
     }
-    deleteVehicle(vehicle){
+    deleteVehicle(vehicle) {
         vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
         this.vehicles.splice(this.vehicles.indexOf(vehicle), 1);
+    }
+    generateBruteforcePathfind(lane1, lane2, directions = [], visitedLanes = []) {
+        if (lane1.lastNode().lanes.includes(lane2)) {
+            return [...directions, "direction", lane1.lastNode(), lane2];
+        } 
+        if (lane1.lastNode().lanes.length == 1 && lane1.lastNode().lanes[0] == lane1) {
+            return null;
+        }
+        visitedLanes.push(lane1); 
+        for (let lane of lane1.lastNode().lanes) {
+            if (lane != lane1 && !visitedLanes.includes(lane)) {
+                let newDirections = [...directions, "direction", lane1.lastNode(), lane];
+                let newDirections2 = this.generateBruteforcePathfind(lane, lane2, newDirections, visitedLanes);
+                if (newDirections2 != null) {
+                    return newDirections2;
+                }
+            }
+        }
+        return null;
     }
     tick(delta) {
         const event = [];

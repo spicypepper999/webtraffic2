@@ -13,15 +13,20 @@ import { SpecialLaneNode } from "./SpecialLaneNode.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
-const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(400, 250)], 2, 50, "red");
+const road1 = new Road([new RoadNode(100, 100), new RoadNode(250, 250), new RoadNode(500, 250)], 2, 50, "red");
 //const road1 = new Road([new RoadNode(400, 250), new RoadNode(250, 250), new RoadNode(100, 100)], 2, 50, "red");
 
 //const road2 = new Road([new RoadNode(600, 250), new RoadNode(750, 250), new RoadNode(800, 400)], 2, 50, "red");
-const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(600, 250)], 2, 50, "red");
+const road2 = new Road([new RoadNode(800, 400), new RoadNode(750, 250), new RoadNode(700, 250)], 2, 50, "red");
 
-const road3 = new Road([new RoadNode(300, 800), new RoadNode(500, 700), new RoadNode(500, 350)], 2, 50, "red");
+const road3 = new Road([new RoadNode(500, 500), new RoadNode(600, 500), new RoadNode(600, 350)], 2, 50, "red");
 
-const intersection1 = new Intersection(500, 300, "T", [road1.lastNode(), road2.lastNode(), road3.lastNode()]);
+const road4 = new Road([new RoadNode(100, 500), new RoadNode(300, 500)], 2, 50, "red");
+
+const road5 = new Road([new RoadNode(400, 800), new RoadNode(400, 600)], 2, 50, "red");
+
+const intersection1 = new Intersection("T", [road1.lastNode(), road2.lastNode(), road3.lastNode()]);
+const intersection2 = new Intersection("T", [road3.firstNode(), road4.lastNode(), road5.lastNode()]);
 
 //why
 //"direction", intersection1.interfaceNodes[1].getExitNodes()[0], intersection1.lanes[3]
@@ -33,13 +38,15 @@ road1.updateLaneNodeReference(road1.firstNode().getExitNodes()[0], exit1);
 //const exit1 = new SpecialLaneNode()
 
 const car1 = new Vehicle(0, 1, road2.lanes[0], 0, 100, ["direction", intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
-const car2 = new Vehicle(120, 1, road1.lanes[1], 0, 100, ["direction", intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[1]], two.makeRectangle(0, 0, 10, 10));
-//const car2 = new Vehicle(120, 1, road1.lanes[1], 0, 100, [], two.makeRectangle(0, 0, 10, 10));
+//const car2 = new Vehicle(120, 1, road1.lanes[1], 0, 100, ["direction", intersection1.interfaceNodes[0].laneNodes[1], intersection1.lanes[1]], two.makeRectangle(0, 0, 10, 10));
+const car2 = new Vehicle(120, 1, road1.lanes[1], 0, 100, [], two.makeRectangle(0, 0, 10, 10));
 const car3 = new Vehicle(40, 1, road2.lanes[0], 0, 100, ["direction", intersection1.interfaceNodes[1].getSourceNodes()[0], intersection1.lanes[3]], two.makeRectangle(0, 0, 10, 10));
 
-const map1 = new TrafficMap([road1, road2, road3], [car1, car2, car3], [intersection1], [source1, exit1]);
+const map1 = new TrafficMap([road1, road2, road3, road4, road5], [car1, car2, car3], [intersection1, intersection2], [source1, exit1]);
 
-
+const direction1 = map1.generateBruteforcePathfind(road1.lanes[1], road5.lanes[0]);
+car2.ruleset = direction1;
+console.log(direction1);
 
 /////
 /////
@@ -71,14 +78,16 @@ for (let road of map1.roads) {
 }
 
 //intersections
-for (let lane of map1.intersections[0].lanes) {
-    for (let i = 0; i < lane.nodes.length; i++) {
-        if (i >= 1) {
-            let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
-        }
-        let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
-        if (lane.nodes[i] instanceof IntersectionLaneNode) {
-            nodes.push({ object: lane.nodes[i], sprite: laneNode });
+for (let intersection of map1.intersections) {
+    for (let lane of intersection.lanes) {
+        for (let i = 0; i < lane.nodes.length; i++) {
+            if (i >= 1) {
+                let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
+            }
+            let laneNode = two.makeCircle(lane.nodes[i].x, lane.nodes[i].y, 3);
+            if (lane.nodes[i] instanceof IntersectionLaneNode) {
+                nodes.push({ object: lane.nodes[i], sprite: laneNode });
+            }
         }
     }
 }
@@ -116,7 +125,7 @@ two.bind('update', function () {
                 }
             }
             if (event[0] == "exit") {
-                for(let i = 0; i < event[1].length; i++) {
+                for (let i = 0; i < event[1].length; i++) {
                     const vehicle = map1.vehicles[map1.vehicles.indexOf(event[1][i])];
                     two.remove(vehicle.sprite);
                     map1.deleteVehicle(vehicle);

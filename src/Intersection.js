@@ -4,7 +4,7 @@ import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { Lane } from "./Lane.js";
 
 export class Intersection {
-    constructor(x, y, type, interfaceNodes) {
+    constructor(type, interfaceNodes) {
         this._interfaceNodes = interfaceNodes;
         this._intersectionNodes = [];
         this._lanes = [];
