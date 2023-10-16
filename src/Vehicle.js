@@ -127,14 +127,16 @@ export class Vehicle {
     getNextLane() {
         const lastNode = this.lane.lastNode();
         let nextLane = lastNode.getStartLanes()[0];
-        for (let i = 0; i < this.ruleset.length; i++) {
-            if (this.ruleset[i] == "direction") {
-                const checkNode = this.ruleset[i + 1];
-                const newLane = this.ruleset[i + 2];
-                if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(newLane)) {
-                    nextLane = newLane;
+        if (this.ruleset != null) {
+            for (let i = 0; i < this.ruleset.length; i++) {
+                if (this.ruleset[i] == "direction") {
+                    const checkNode = this.ruleset[i + 1];
+                    const newLane = this.ruleset[i + 2];
+                    if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(newLane)) {
+                        nextLane = newLane;
+                    }
+                    i += 3;
                 }
-                i += 3;
             }
         }
         return nextLane;
