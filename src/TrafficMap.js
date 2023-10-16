@@ -1,5 +1,7 @@
 import { Lane } from "./Lane.js"
 import { Vehicle } from "./Vehicle.js"
+import { SpecialLaneNode } from "./SpecialLaneNode.js";
+import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class TrafficMap {
     constructor(roads, vehicles, intersections, specialNodes) {
@@ -39,11 +41,11 @@ export class TrafficMap {
     generateBruteforcePathfind(lane1, lane2, directions = [], visitedLanes = []) {
         if (lane1.lastNode().lanes.includes(lane2)) {
             return [...directions, "direction", lane1.lastNode(), lane2];
-        } 
+        }
         if (lane1.lastNode().lanes.length == 1 && lane1.lastNode().lanes[0] == lane1) {
             return null;
         }
-        visitedLanes.push(lane1); 
+        visitedLanes.push(lane1);
         for (let lane of lane1.lastNode().lanes) {
             if (lane != lane1 && !visitedLanes.includes(lane)) {
                 let newDirections = [...directions, "direction", lane1.lastNode(), lane];
@@ -69,6 +71,63 @@ export class TrafficMap {
         // for(let intersection of this.intersections){
         //     //intersection.tick(delta);
         // }
+        //console.log(event);
         return event;
+    }
+    getIntersectionNodes() {
+        const nodes = [];
+        for (let road of this.roads) {
+            for (let roadNode of road.nodes) {
+                for (let node of roadNode.laneNodes) {
+                    if (node instanceof IntersectionLaneNode && !nodes.includes(node)) {
+                        nodes.push(node);
+                    }
+                }
+            }
+        }
+        for (let intersection of this.intersections) {
+            for (let node of intersection.intersectionNodes) {
+                if (node instanceof IntersectionLaneNode && !nodes.includes(node)) {
+                    nodes.push(node);
+                }
+            }
+        }
+        return nodes;
+    }
+    getLaneNodes() {
+        const nodes = [];
+        for (let road of this.roads) {
+            for (let roadNode of road.nodes) {
+                for (let node of roadNode.laneNodes) {
+                    if (!nodes.includes(node)) {
+                        nodes.push(node);
+                    }
+                }
+            }
+        }
+        for (let intersection of this.intersections) {
+            for (let node of intersection.intersectionNodes) {
+                if (!nodes.includes(node)) {
+                    nodes.push(node);
+                }
+            }
+        }
+        for (let node of this.specialNodes) {
+            if (!nodes.includes(node)) {
+                nodes.push(node);
+            }
+        }
+        return nodes;
+    }
+    getRoadNodes() {
+        const nodes = [];
+        for (let road of this.roads) {
+            for (let roadNode of road.nodes) {
+                if (!nodes.includes(roadNode)) {
+                    nodes.push(roadNode);
+                }
+            }
+        }
+        return nodes;
     }
 }
