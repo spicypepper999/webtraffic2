@@ -23,13 +23,4 @@ export class LaneNode extends BasicNode {
         }
         return startLanes;
     }
-    transferVehicle(vehicle, nextLane = null) {
-            if (!this.lanes.includes(nextLane) || !this.lanes.includes(vehicle.lane)) {
-                nextLane = this.getStartLanes()[0];
-            }
-            vehicle.lane.vehicles.splice(vehicle.lane.vehicles.indexOf(vehicle), 1);
-            vehicle.lane = nextLane;
-            vehicle.position = nextLane.positionOfNode(this);
-            nextLane.vehicles.push(vehicle);
-    }
 }

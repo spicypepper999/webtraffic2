@@ -77,9 +77,19 @@ export class Vehicle {
         }
         return XYDir;
     }
+    transferLanes(nextLane = null) {
+        const node = this.lane.lastNode();
+        if (!node.lanes.includes(nextLane) || !node.lanes.includes(this.lane)) {
+            nextLane = node.getStartLanes()[0];
+        }
+        this.lane.vehicles.splice(this.lane.vehicles.indexOf(this), 1);
+        this.lane = nextLane;
+        this.position = nextLane.positionOfNode(node);
+        nextLane.vehicles.push(this);
+    }
     move(delta) {
         if (this.position > this.lane.length()) {
-            this.lane.lastNode().transferVehicle(this, this.getNextLane());;
+            this.transferLanes(this.getNextLane());
         }
         //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
         if (this.lane.speedLimit < this.speed || this.returnObstacles(this.getLaneStoppingDistance() + 50).length > 0) {

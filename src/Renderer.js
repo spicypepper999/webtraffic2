@@ -113,7 +113,7 @@ two.bind('update', function () {
     //
     //
     document.querySelector("#mousecoords").innerHTML = mousePosition[0] + " " + mousePosition[1];
-    //document.querySelector("#counter").innerHTML = map1.specialNodes[1].counter;
+    document.querySelector("#counter").innerHTML = map1.specialNodes[1].counter;
     //
     //
 
