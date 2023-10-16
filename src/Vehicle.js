@@ -66,7 +66,7 @@ export class Vehicle {
     getStoppingDistance() {
         return ((this.speed ** 2) / (this.power * 2));
     }
-    getLaneStoppingDistance(){
+    getLaneStoppingDistance() {
         return ((this.lane.speedLimit ** 2) / (this.power * 2));
     }
 
@@ -113,9 +113,11 @@ export class Vehicle {
         const obstacles = [];
         obstacles.push(...this.lane.returnObstacles(this.position, distance, this));
         const distanceLeft = this.position + distance - this.lane.length();
-        const nextLane = this.getNextLane();
-        if (nextLane != null && distanceLeft > 0) {
-            obstacles.push(...nextLane.returnObstacles(0, distanceLeft, this));
+        if (distanceLeft > 0) {
+            const nextLane = this.getNextLane();
+            if (nextLane != null) {
+                obstacles.push(...nextLane.returnObstacles(0, distanceLeft, this));
+            }
         }
         return obstacles;
     }

@@ -69,12 +69,19 @@ export class Intersection {
             this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getExitNodesNormalized()[0], newIntersection6);
             this.intersectionNodes.push(newIntersection6);
 
-            this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
-            this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[2].getExitNodesNormalized()[0]], 40));
-            this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[0], this.interfaceNodes[0].getExitNodesNormalized()[0]], 40));
-            this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[this.interfaceNodes[1].getSourceNodesNormalized().length - 1], this.interfaceNodes[2].getExitNodesNormalized()[this.interfaceNodes[2].getExitNodesNormalized().length - 1]], 40));
-            this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[this.interfaceNodes[2].getSourceNodesNormalized().length - 1], this.interfaceNodes[0].getExitNodesNormalized()[this.interfaceNodes[0].getExitNodesNormalized().length - 1]], 40));
-            this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[0].getSourceNodesNormalized()[0], this.interfaceNodes[2].getExitNodesNormalized()[0]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[0], this.interfaceNodes[0].getExitNodesNormalized()[0]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[1].getSourceNodesNormalized()[this.interfaceNodes[1].getSourceNodesNormalized().length - 1], this.interfaceNodes[2].getExitNodesNormalized()[this.interfaceNodes[2].getExitNodesNormalized().length - 1]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[this.interfaceNodes[2].getSourceNodesNormalized().length - 1], this.interfaceNodes[0].getExitNodesNormalized()[this.interfaceNodes[0].getExitNodesNormalized().length - 1]], 40));
+            // this.lanes.push(new Lane([this.interfaceNodes[2].getSourceNodesNormalized()[0], this.interfaceNodes[1].getExitNodesNormalized()[0]], 40));
+
+            this.lanes.push(new Lane([this.interfaceNodes[0].getExitNodesNormalized()[0], this.interfaceNodes[1].getSourceNodesNormalized()[0]], 40));
+            this.lanes.push(new Lane([this.interfaceNodes[0].getExitNodesNormalized()[0], this.interfaceNodes[2].getSourceNodesNormalized()[0]], 40));
+            this.lanes.push(new Lane([this.interfaceNodes[1].getExitNodesNormalized()[0], this.interfaceNodes[0].getSourceNodesNormalized()[0]], 40));
+            this.lanes.push(new Lane([this.interfaceNodes[1].getExitNodesNormalized()[this.interfaceNodes[1].getExitNodesNormalized().length - 1], this.interfaceNodes[2].getSourceNodesNormalized()[this.interfaceNodes[2].getSourceNodesNormalized().length - 1]], 40));
+            this.lanes.push(new Lane([this.interfaceNodes[2].getExitNodesNormalized()[this.interfaceNodes[2].getExitNodesNormalized().length - 1], this.interfaceNodes[0].getSourceNodesNormalized()[this.interfaceNodes[0].getSourceNodesNormalized().length - 1]], 40));
+            this.lanes.push(new Lane([this.interfaceNodes[2].getExitNodesNormalized()[0], this.interfaceNodes[1].getSourceNodesNormalized()[0]], 40));
 
             newIntersection3.ruleset = ["YIELD", this.lanes[0], this.lanes[0].findIntersectPosition(this.lanes[3]).thisPosition - 100, 100, this.lanes[2]];
 

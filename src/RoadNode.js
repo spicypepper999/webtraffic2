@@ -28,49 +28,75 @@ export class RoadNode extends BasicNode {
         }
     }
     getExitNodes() {
-        const intake = [];
-        for (let i = 0; i < (this.laneNodes.length / 2); i++) {
-            intake.push(this.laneNodes[i]);
-        }
-        return intake;
-    }
-
-    getSourceNodes() {
         const exit = [];
-        for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
+        for (let i = 0; i < (this.laneNodes.length / 2); i++) {
             exit.push(this.laneNodes[i]);
         }
-        exit.reverse();
+        return exit;
+    }
+    getSourceNodes() {
+        const source = [];
+        for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
+            source.push(this.laneNodes[i]);
+        }
+        source.reverse();
+        return source;
+    }
+    getSourceNodesNormalized() {
+        const source = [];
+        if (this.road.lastNode() == this) {
+            for (let i = (this.laneNodes.length / 2) - 1; i >= 0; i--) {
+                source.push(this.laneNodes[i]);
+            }
+        } else {
+            for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
+                source.push(this.laneNodes[i]);
+            }
+        }
+        source.reverse();
+        return source;
+    }
+    getExitNodesNormalized() {
+        const exit = [];
+        if (this.road.lastNode() == this) {
+            for (let i = this.laneNodes.length - 1; i >= (this.laneNodes.length / 2); i--) {
+                exit.push(this.laneNodes[i]);
+            }
+        } else {
+            for (let i = 0; i < (this.laneNodes.length / 2); i++) {
+                exit.push(this.laneNodes[i]);
+            }
+        }
         return exit;
     }
 
     //high potency and high yield autismo code down here
-
-    getSourceNodesNormalized() {
-        if (this.road.lastNode() == this) {
-            this.laneNodes.reverse();
-        }
-        const intake = [];
-        for (let i = 0; i < (this.laneNodes.length / 2); i++) {
-            intake.push(this.laneNodes[i]);
-        }
-        if (this.road.lastNode() == this) {
-            this.laneNodes.reverse();
-        }
-        return intake;
-    }
-    getExitNodesNormalized() {
-        if (this.road.lastNode() == this) {
-            this.laneNodes.reverse();
-        }
-        const exit = [];
-        for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
-            exit.push(this.laneNodes[i]);
-        }
-        exit.reverse();
-        if (this.road.lastNode() == this) {
-            this.laneNodes.reverse();
-        }
-        return exit;
-    }
+    // getSourceNodesNormalized() {
+    //     if (this.road.lastNode() == this) {
+    //         this.laneNodes.reverse();
+    //     }
+    //     const source = [];
+    //     for (let i = (this.laneNodes.length / 2); i < this.laneNodes.length; i++) {
+    //         source.push(this.laneNodes[i]);
+    //     }
+    //     source.reverse();
+    //     if (this.road.lastNode() == this) {
+    //         this.laneNodes.reverse();
+    //     }
+    //     return source;
+    // }
+    // getExitNodesNormalized() {
+    //     if (this.road.lastNode() == this) {
+    //         this.laneNodes.reverse();
+    //     }
+    //     const exit = [];
+    //     for (let i = 0; i < (this.laneNodes.length / 2); i++) {
+    //         exit.push(this.laneNodes[i]);
+    //     }
+    //     //exit.reverse();
+    //     if (this.road.lastNode() == this) {
+    //         this.laneNodes.reverse();
+    //     }
+    //     return exit;
+    // }
 }
