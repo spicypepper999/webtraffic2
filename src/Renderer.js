@@ -9,8 +9,8 @@ import { RoadNode } from "./RoadNode.js";
 import { Intersection } from "./Intersection.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
-import { map1 } from "./maps/map1.js";
-//import { map1 } from "./maps/map2.js";
+//import { map1 } from "./maps/map1.js";
+import { map1 } from "./maps/map2.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -113,7 +113,7 @@ two.bind('update', function () {
     //
     //
     document.querySelector("#mousecoords").innerHTML = mousePosition[0] + " " + mousePosition[1];
-    document.querySelector("#counter").innerHTML = map1.specialNodes[1].counter;
+    //document.querySelector("#counter").innerHTML = map1.specialNodes[1].counter;
     //
     //
 

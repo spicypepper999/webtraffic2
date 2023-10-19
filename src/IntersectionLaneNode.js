@@ -38,7 +38,9 @@ export class IntersectionLaneNode extends LaneNode {
                 }
             }
             if (this.ruleset[1] instanceof Intersection){
-                if (this.ruleset[1].currentVehicle != null && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.lane) && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.getNextLane()) && vehicle != this.ruleset[1].currentVehicle) {
+                console.log(this.ruleset[1].currentVehicle);
+                //the line below gave me cancer
+                if (this.ruleset[1].currentVehicle != null && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.lane) && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.getNextLane()) && this.ruleset[1].currentVehicle.lane.positionOfNode(this) < this.ruleset[1].currentVehicle.position && vehicle != this.ruleset[1].currentVehicle) {
                     this.ruleset[1].currentVehicle = null;
                 }
                 if (vehicle == this.ruleset[1].currentVehicle) {
@@ -86,5 +88,3 @@ export class IntersectionLaneNode extends LaneNode {
         }
     }
 }
-
-// if (this.ruleset[i+1].returnVehicles(this.ruleset[i+2], this.ruleset[i+3]).length == 0 || this.ruleset[i+4] == vehicle.getNextLane()) {
