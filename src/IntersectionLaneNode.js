@@ -1,4 +1,5 @@
 import { Lane } from "./Lane.js";
+import { Intersection } from "./Intersection.js";
 import { LaneNode } from "./LaneNode.js";
 import { Vehicle } from "./Vehicle.js";
 
@@ -6,7 +7,7 @@ export class IntersectionLaneNode extends LaneNode {
     constructor(laneNode, ruleset) {
         super(laneNode.x, laneNode.y, laneNode.lanes);
         this._ruleset = ruleset;
-        this._currentCar = null;
+        this._currentVehicle = null;
         //this.updateLaneReferences();
     }
     set ruleset(value) {
@@ -15,39 +16,75 @@ export class IntersectionLaneNode extends LaneNode {
     get ruleset() {
         return this._ruleset;
     }
-    set currentCar(value) {
-        this._currentCar = value;
+    set currentVehicle(value) {
+        this._currentVehicle = value;
     }
-    get currentCar() {
-        return this._currentCar;
+    get currentVehicle() {
+        return this._currentVehicle;
     }
     isObstacle(vehicle) {
         if (this.ruleset[0] == "STOP") {
-            if (this.currentCar != null && !this.lanes.includes(this.currentCar.lane)) {
-                this.currentCar = null;
-            }
-            if (vehicle == this.currentCar) {
-                return false;
-            } else {
-                if (vehicle.speed == 0 && this.currentCar == null) {
-                    this.currentCar = vehicle;
+            if (this.ruleset[1] == undefined) {
+                if (this.currentVehicle != null && !this.lanes.includes(this.currentVehicle.lane)) {
+                    this.currentVehicle = null;
                 }
-                return true;
+                if (vehicle == this.currentVehicle) {
+                    return false;
+                } else {
+                    if (vehicle.speed == 0 && this.currentVehicle == null) {
+                        this.currentVehicle = vehicle;
+                    }
+                    return true;
+                }
+            }
+            if (this.ruleset[1] instanceof Intersection){
+                if (this.ruleset[1].currentVehicle != null && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.lane) && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.getNextLane()) && vehicle != this.ruleset[1].currentVehicle) {
+                    this.ruleset[1].currentVehicle = null;
+                }
+                if (vehicle == this.ruleset[1].currentVehicle) {
+                    return false;
+                } else {
+                    if (vehicle.speed == 0 && this.ruleset[1].currentVehicle == null) {
+                        //this.ruleset[1].currentVehicle = vehicle;
+                        this.ruleset[1].currentVehicle = this.ruleset[1].vehicleQueue.shift();
+                    }
+                    if(!this.ruleset[1].vehicleQueue.includes(vehicle)){
+                        this.ruleset[1].vehicleQueue.push(vehicle);
+                    }
+                    return true;
+                }
             }
         }
         if (this.ruleset[0] == "FULLSTOP") {
             return true;
         }
         if (this.ruleset[0] == "YIELD") {
-            if (vehicle.lane == this.ruleset[1]) {
-                return false;
-            } else {
-                if (this.ruleset[1].returnVehicles(this.ruleset[2], this.ruleset[3]).length == 0 || this.ruleset[4] == vehicle.getNextLane()) {
-                    return false;
-                } else {
-                    return true;
+            let final = false;
+            for (let i = 0; i < this.ruleset.length; i++) {
+                if (this.ruleset[i] == "YIELD") {
+                    if (vehicle.lane == this.ruleset[i + 1]) {
+                        if (!final) {
+                            final = false;
+                        }
+                    } else {
+                        if (this.ruleset[i + 1].returnVehicles(this.ruleset[i + 2], this.ruleset[i + 3]).length == 0) {
+                            if (!final) {
+                                final = false;
+                            }
+                        } else {
+                            final = true;
+                        }
+                    }
+                }
+                if (this.ruleset[i] == "PRIORITY") {
+                    if (this.ruleset[i + 1] == vehicle.getNextLane()) {
+                        final = false;
+                    }
                 }
             }
+            return final;
         }
     }
 }
+
+// if (this.ruleset[i+1].returnVehicles(this.ruleset[i+2], this.ruleset[i+3]).length == 0 || this.ruleset[i+4] == vehicle.getNextLane()) {
