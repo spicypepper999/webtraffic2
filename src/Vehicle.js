@@ -62,6 +62,9 @@ export class Vehicle {
         return this._sprite;
     }
 
+    tempCheckDistance(){
+        return this.getLaneStoppingDistance() + 50;
+    }
     //i dont think this works properly
     getStoppingDistance() {
         return ((this.speed ** 2) / (this.power * 2));
@@ -92,7 +95,7 @@ export class Vehicle {
             this.transferLanes(this.getNextLane());
         }
         //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
-        if (this.lane.speedLimit < this.speed || this.returnObstacles(this.getLaneStoppingDistance() + 50).length > 0) {
+        if (this.lane.speedLimit < this.speed || this.returnObstacles(this.tempCheckDistance()).length > 0) {
             this.brake(delta);
         } else if (this.lane.speedLimit > this.speed) {
             this.accelerate(delta);
@@ -156,5 +159,8 @@ export class Vehicle {
         this.sprite.position.set(XYDir.x, XYDir.y);
         this.sprite.rotation = XYDir.dir;
         this.sprite.fill = this.color;
+    }
+    returnCurrentObstacles(){
+        return this.returnObstacles(this.tempCheckDistance());
     }
 }

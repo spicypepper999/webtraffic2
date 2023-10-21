@@ -37,21 +37,22 @@ export class IntersectionLaneNode extends LaneNode {
                     return true;
                 }
             }
-            if (this.ruleset[1] instanceof Intersection){
-                console.log(this.ruleset[1].currentVehicle);
-                //the line below gave me cancer
-                if (this.ruleset[1].currentVehicle != null && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.lane) && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.getNextLane()) && this.ruleset[1].currentVehicle.lane.positionOfNode(this) < this.ruleset[1].currentVehicle.position && vehicle != this.ruleset[1].currentVehicle) {
+            if (this.ruleset[1] instanceof Intersection) {
+                //the line below gives me cancer.
+                if (this.ruleset[1].currentVehicle != null && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.lane) && !this.ruleset[1].lanes.includes(this.ruleset[1].currentVehicle.getNextLane()) && !this.ruleset[1].intersectionNodes.includes(this.ruleset[1].currentVehicle.lane.returnNodes(this.ruleset[1].currentVehicle.position, this.ruleset[1].currentVehicle.tempCheckDistance())[0]) && vehicle != this.ruleset[1].currentVehicle) {
                     this.ruleset[1].currentVehicle = null;
                 }
                 if (vehicle == this.ruleset[1].currentVehicle) {
                     return false;
                 } else {
-                    if (vehicle.speed == 0 && this.ruleset[1].currentVehicle == null) {
-                        //this.ruleset[1].currentVehicle = vehicle;
-                        this.ruleset[1].currentVehicle = this.ruleset[1].vehicleQueue.shift();
-                    }
-                    if(!this.ruleset[1].vehicleQueue.includes(vehicle)){
-                        this.ruleset[1].vehicleQueue.push(vehicle);
+                    if (vehicle.speed == 0) {
+                        if (!this.ruleset[1].vehicleQueue.includes(vehicle)) {
+                            this.ruleset[1].vehicleQueue.push(vehicle);
+                        }
+                        if (this.ruleset[1].currentVehicle == null) {
+                            const newVehicle = this.ruleset[1].vehicleQueue.shift();
+                            this.ruleset[1].currentVehicle = newVehicle;
+                        }
                     }
                     return true;
                 }

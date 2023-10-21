@@ -28,10 +28,13 @@ road2.updateLaneNodeReference(road2.firstNode().getSourceNodesNormalized()[0], s
 const exit2 = new SpecialLaneNode(road3.firstNode().getExitNodesNormalized()[0], ["exit", road3.firstNode().getExitNodesNormalized()[0].lanes[0], 100, 2]);
 road3.updateLaneNodeReference(road3.firstNode().getExitNodesNormalized()[0], exit2);
 
+const source3 = new SpecialLaneNode(road4.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road4.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 3]);
+road4.updateLaneNodeReference(road4.firstNode().getSourceNodesNormalized()[0], source3);
+
 //const car1 = new Vehicle(5, 1, road2.lanes[0], 0, 100, [], );
 
-const map1 = new TrafficMap([road1, road2, road3, road4], [], [intersection1], [source1, exit1, source2, exit2]);
-source2.ruleset[1][5] = map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road4.lanes[0]);
+const map1 = new TrafficMap([road1, road2, road3, road4], [], [intersection1], [source1, exit1, source2, exit2, source3]);
+//source2.ruleset[1][5] = map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road4.lanes[0]);
 // console.log(road3.lanes[0]);
 // console.log(source2.ruleset[1][5]);
 // console.log(map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road3.lanes[0]));

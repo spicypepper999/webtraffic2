@@ -130,6 +130,15 @@ export class Lane {
         }
         return obstacles;
     }
+    returnNodes(position, distance){
+        const obstacles = [];
+        for(let node of this.nodes){
+            if(((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0)){
+                obstacles.push(node);
+            }
+        }
+        return obstacles;
+    }
     //returns old and new node so road can update its own references
     convertEndStop(){
         const newNode = new IntersectionLaneNode(this.lastNode(), ["FULLSTOP"]);
