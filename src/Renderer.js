@@ -14,10 +14,10 @@ import { map1 } from "./maps/map2.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
-const nodes = initializeNodeSprites(map1);
 initializeRoadSprites(map1);
 initializeIntersectionSprites(map1);
 initializeVehicleSprites(map1);
+const nodes = initializeNodeSprites(map1);
 
 function initializeNodeSprites(map){
     const laneNodes = map.getLaneNodes();
@@ -31,8 +31,8 @@ function initializeNodeSprites(map){
         }
     }
     for (let node of roadNodes){
-        let roadNode = two.makeCircle(node.x, node.y, 5);
-        roadNode.fill = "lightgray";
+        // let roadNode = two.makeCircle(node.x, node.y, 5);
+        // roadNode.fill = "lightgray";
     }
     for (let node of intersectionNodes){
         const laneNode = two.makeCircle(node.x, node.y, 3);
@@ -41,12 +41,36 @@ function initializeNodeSprites(map){
     return nodes;
 }
 
+// function initializeIntersectionSprites(map) {
+//     for (let intersection of map.intersections) {
+//         for (let lane of intersection.lanes) {
+//             for (let i = 0; i < lane.nodes.length; i++) {
+//                 if (i >= 1) {
+//                     let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
+//                 }
+//             }
+//         }
+//     }
+// }
+
 function initializeIntersectionSprites(map) {
     for (let intersection of map.intersections) {
         for (let lane of intersection.lanes) {
             for (let i = 0; i < lane.nodes.length; i++) {
                 if (i >= 1) {
-                    let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
+                    let startX = lane.nodes[i - 1].x;
+                    let startY = lane.nodes[i - 1].y;
+                    let endX = lane.nodes[i].x;
+                    let endY = lane.nodes[i].y;
+
+                    let dx = endX - startX;
+                    let dy = endY - startY;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let angle = Math.atan2(dy, dx);
+
+                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 16, distance); 
+                    roadSegment.rotation = angle + Math.PI/2;
+                    roadSegment.fill = new Two.Texture('../textures/roadsmall2.png');
                 }
             }
         }
@@ -59,19 +83,43 @@ function initializeVehicleSprites(map) {
     }
 }
 
-function initializeRoadSprites(map) {
-    const nodes = [];
+// function initializeRoadSprites(map) {
+//     for (let road of map.roads) {
+//         for (let lane of road.lanes) {
+//             for (let i = 0; i < lane.nodes.length; i++) {
+//                 if (i >= 1) {
+//                     let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
+//                 }
+//             }
+//         }
+//     }
+// }
+
+function initializeRoadSprites(map, roadTexture) {
     for (let road of map.roads) {
         for (let lane of road.lanes) {
             for (let i = 0; i < lane.nodes.length; i++) {
                 if (i >= 1) {
-                    let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
+                    let startX = lane.nodes[i - 1].x;
+                    let startY = lane.nodes[i - 1].y;
+                    let endX = lane.nodes[i].x;
+                    let endY = lane.nodes[i].y;
+
+                    let dx = endX - startX;
+                    let dy = endY - startY;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let angle = Math.atan2(dy, dx);
+
+                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 16, distance); 
+                    roadSegment.rotation = angle + Math.PI/2;
+                    roadSegment.fill = new Two.Texture('../textures/roadsmall2.png');
                 }
             }
         }
     }
-    return nodes;
 }
+
+
 
 two.bind('update', function () {
     const events = map1.tick((two.timeDelta / 1000));
