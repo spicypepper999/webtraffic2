@@ -87,5 +87,8 @@ export class IntersectionLaneNode extends LaneNode {
             }
             return final;
         }
+        if (this.ruleset[0] == "GO") {
+            return false;
+        }
     }
 }

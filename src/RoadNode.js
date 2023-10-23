@@ -1,4 +1,6 @@
 import { BasicNode } from "./BasicNode.js";
+import { LaneNode } from "./LaneNode.js";
+import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class RoadNode extends BasicNode {
     constructor(x, y, road, laneNodes = []) {
@@ -69,7 +71,12 @@ export class RoadNode extends BasicNode {
         }
         return exit;
     }
-
+    // convertGo() {
+    //     for (let i = 0; i < this.laneNodes.length; i++) {
+    //         const newNode = new IntersectionLaneNode(this.laneNodes[i], ["GO"]);
+    //         this.laneNodes[i] = newNode;
+    //     }
+    // }
     //high potency and high yield autismo code down here
     // getSourceNodesNormalized() {
     //     if (this.road.lastNode() == this) {

@@ -146,6 +146,12 @@ export class Lane {
         this.nodes[this.nodes.length - 1] = newNode;
         return {oldNode: oldNode, newNode: newNode};
     }
+    convertEndGo(){
+        const newNode = new IntersectionLaneNode(this.lastNode(), ["GO"]);
+        const oldNode = this.lastNode();
+        this.nodes[this.nodes.length - 1] = newNode;
+        return {oldNode: oldNode, newNode: newNode};
+    }
     //troll face code
     findIntersectPosition(lane){
         const thisLength = this.length();

@@ -135,6 +135,12 @@ export class Road {
             this.updateLaneNodeReference(nodes.oldNode, nodes.newNode);
         }
     }
+    convertEndGo() {
+        for (let lane of this.lanes) {
+            const nodes = lane.convertEndGo();
+            this.updateLaneNodeReference(nodes.oldNode, nodes.newNode);
+        }
+    }
     updateLaneNodeReference(oldNode, newNode) {
         for (let node of this.nodes) {
             //for of loop didnt work here with references

@@ -10,8 +10,8 @@ import { Intersection } from "./Intersection.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
 //import { map1 } from "./maps/map1.js";
-import { map1 } from "./maps/map2.js";
-//import { map1 } from "./maps/map3.js";
+//import { map1 } from "./maps/map2.js";
+import { map1 } from "./maps/map3.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -125,6 +125,8 @@ function initializeRoadSprites(map, roadTexture) {
 
 two.bind('update', function () {
     const events = map1.tick((two.timeDelta / 1000));
+
+    //console.log(map1.vehicles[1]);
 
     //EVENT SYSTEM TO HANDLE SPRITE CREATION/DELETION WHEN SPAWNING/REMOVING VEHICLES
     if (events.length > 0) {

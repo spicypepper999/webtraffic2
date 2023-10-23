@@ -95,7 +95,7 @@ export class Vehicle {
             this.transferLanes(this.getNextLane());
         }
         //COME BACK!!! MANUALLY SETTING OBSTACLE CHECK DISTANCE!!!!
-        if (this.lane.speedLimit < this.speed || this.returnObstacles(this.tempCheckDistance()).length > 0) {
+        if (this.lane.speedLimit < this.speed || this.returnObstacles(this.tempCheckDistance()).length > 0 || (this.getNextLane() != null && ((this.position + this.tempCheckDistance()) > this.lane.length()) && this.getNextLane().speedLimit < this.speed)) {
             this.brake(delta);
         } else if (this.lane.speedLimit > this.speed) {
             this.accelerate(delta);
@@ -148,7 +148,7 @@ export class Vehicle {
                     if (checkNode == this.lane.lastNode() && checkNode.lanes.includes(newLane)) {
                         nextLane = newLane;
                     }
-                    i += 3;
+                    i += 2;
                 }
             }
         }
