@@ -43,6 +43,15 @@ export class Road {
     lastNode() {
         return this.nodes[this.nodes.length - 1];
     }
+    length() {
+        let length = 0;
+        let nodeCompare = this.nodes[0];
+        for (let node of this.nodes) {
+            length += node.distanceTo(nodeCompare);
+            nodeCompare = node;
+        }
+        return length;
+    }
     getSourceLanes() {
         const source = [];
         for (let i = 0; i < (this.nodes.length / 2); i++) {
@@ -158,5 +167,26 @@ export class Road {
                 }
             }
         }
+    }
+    findIntersectPosition(road){
+        const thisLength = this.lanes[0].length();
+        const nextLength = road.lanes[0].length();
+
+        let thisPosition = 0;
+        let nextPosition = 0;
+        let minDistance = thisLength + nextLength;
+        for(let i = 0; i < thisLength; i++){
+            const thisCoord = this.lanes[0].XYDirFromPosition(i);
+            for(let j = 0; j < nextLength; j++){
+                const nextCoord = road.lanes[0].XYDirFromPosition(j);
+                const distance =  Math.sqrt(((thisCoord.x - nextCoord.x)**2)+((thisCoord.y - nextCoord.y)**2));
+                if(distance < minDistance){
+                    minDistance = distance;
+                    thisPosition = i;
+                    nextPosition = j;
+                }
+            }
+        }
+        return thisPosition;
     }
 }

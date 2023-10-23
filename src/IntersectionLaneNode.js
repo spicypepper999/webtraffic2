@@ -63,6 +63,12 @@ export class IntersectionLaneNode extends LaneNode {
         }
         if (this.ruleset[0] == "YIELD") {
             let final = false;
+            if (this.currentVehicle != null && (this.currentVehicle.lane.lastNode() != this)) {
+                this.currentVehicle = null;
+            }
+            if (vehicle == this.currentVehicle) {
+                return false;
+            } 
             for (let i = 0; i < this.ruleset.length; i++) {
                 if (this.ruleset[i] == "YIELD") {
                     if (vehicle.lane == this.ruleset[i + 1]) {
@@ -76,6 +82,7 @@ export class IntersectionLaneNode extends LaneNode {
                             }
                         } else {
                             final = true;
+                            this.currentVehicle = vehicle;
                         }
                     }
                 }

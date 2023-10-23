@@ -55,6 +55,17 @@ export class Lane {
         }
         return length;
     }
+    getIndexFromPosition(position){
+        let length = 0;
+        let nodeCompare = this.nodes[0];
+        let i = 0;
+        while(length < position){
+            length += this.positionOfNode(nodeCompare);
+            nodeCompare = this.nodes[i];
+            i++;
+        }
+        return i;
+    }
     //Get coordinates and direction from given position.
     XYDirFromPosition(position) {
         const node = new BasicNode(0,0);

@@ -17,22 +17,20 @@ const road4 = new Road([new RoadNode(400, 700), new RoadNode(600, 700), new Road
 const intersection1 = new Intersection("X2-2-2-2-STOP", [road1.lastNode(), road2.lastNode(), road3.lastNode(), road4.lastNode()], 600, 350, 0);
 console.log(intersection1.node);
 
-const source1 = new SpecialLaneNode(road1.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road1.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 1]);
+const source1 = new SpecialLaneNode(road1.firstNode().getSourceNodesNormalized()[0], ["source", [1,  road1.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 2]);
 road1.updateLaneNodeReference(road1.firstNode().getSourceNodesNormalized()[0], source1);
 
-const exit1 = new SpecialLaneNode(road2.firstNode().getExitNodesNormalized()[0], ["exit", road2.firstNode().getExitNodesNormalized()[0].lanes[0], 100, 2]);
-road2.updateLaneNodeReference(road2.firstNode().getExitNodesNormalized()[0], exit1);
+const exit1 = new SpecialLaneNode(road4.firstNode().getExitNodesNormalized()[0], ["exit", road4.firstNode().getExitNodesNormalized()[0].lanes[0], 100, 2]);
+road4.updateLaneNodeReference(road4.firstNode().getExitNodesNormalized()[0], exit1);
 
-const source2 = new SpecialLaneNode(road2.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road2.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, ["direction", intersection1.intersectionNodes[3], road3.lanes[0]], ], 10]);
+const source2 = new SpecialLaneNode(road2.firstNode().getSourceNodesNormalized()[0], ["source", [1,  road2.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, ["direction", intersection1.intersectionNodes[3], road3.lanes[0]], ], 2]);
 road2.updateLaneNodeReference(road2.firstNode().getSourceNodesNormalized()[0], source2);
 
 const exit2 = new SpecialLaneNode(road3.firstNode().getExitNodesNormalized()[0], ["exit", road3.firstNode().getExitNodesNormalized()[0].lanes[0], 100, 2]);
 road3.updateLaneNodeReference(road3.firstNode().getExitNodesNormalized()[0], exit2);
 
-const source3 = new SpecialLaneNode(road4.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road4.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 3]);
-road4.updateLaneNodeReference(road4.firstNode().getSourceNodesNormalized()[0], source3);
-
-const map1 = new TrafficMap([road1, road2, road3, road4], [], [intersection1], [source1, exit1, source2, exit2, source3]);
-source2.ruleset[1][5] = map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road4.lanes[0]);
+const map1 = new TrafficMap([road1, road2, road3, road4], [], [intersection1], [source1, source2, exit1, exit2]);
+source1.ruleset[1][4] = map1.generateBruteforcePathfind(road1.firstNode().getSourceNodesNormalized()[0].lanes[0], road3.lanes[0]);
+source2.ruleset[1][4] = map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road4.lanes[0]);
 
 export { map1 };

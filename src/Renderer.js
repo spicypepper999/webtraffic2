@@ -12,6 +12,7 @@ import { SpecialLaneNode } from "./SpecialLaneNode.js";
 //import { map1 } from "./maps/map1.js";
 //import { map1 } from "./maps/map2.js";
 import { map1 } from "./maps/map3.js";
+//import { map1 } from "./maps/map4.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -80,8 +81,8 @@ function initializeIntersectionSprites(map) {
 
 function initializeVehicleSprites(map) {
     for (let vehicle of map.vehicles) {
-        vehicle.sprite = two.makeRectangle(0, 0, 10, 10);
-//        vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
+        vehicle.sprite = two.makeRectangle(0, 0, 20, 20);
+        vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
     }
 }
 
@@ -123,10 +124,10 @@ function initializeRoadSprites(map, roadTexture) {
 
 
 
-two.bind('update', function () {
+two.bind('update', function (frame) {
     const events = map1.tick((two.timeDelta / 1000));
 
-    //console.log(map1.vehicles[1]);
+    //console.log(map1.vehicles[0].position);
 
     //EVENT SYSTEM TO HANDLE SPRITE CREATION/DELETION WHEN SPAWNING/REMOVING VEHICLES
     if (events.length > 0) {
@@ -135,8 +136,9 @@ two.bind('update', function () {
                 for (let i = 0; i < event[1].length; i++) {
                     const vehicle = map1.vehicles[map1.vehicles.indexOf(event[1][i])];
                     two.remove(vehicle.sprite);
-                    vehicle.sprite = two.makeRectangle(0, 0, 10, 10);
-//                    vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
+                    vehicle.sprite = two.makeRectangle(0, 0, 20, 20);
+                    vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
+                    //vehicle.sprite.fill = vehicle.color;
                 }
             }
             if (event[0] == "exit") {
@@ -165,8 +167,12 @@ two.bind('update', function () {
     }
     //
     //
+
+    
     document.querySelector("#mousecoords").innerHTML = mousePosition[0] + " " + mousePosition[1];
-    //document.querySelector("#counter").innerHTML = map1.specialNodes[1].counter;
+    document.querySelector("#counter").innerHTML = map1.specialNodes[2].counter + " " + map1.specialNodes[3].counter;
+    document.querySelector("#frames").innerHTML = frame;
+
     //
     //
 

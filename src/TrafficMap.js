@@ -1,10 +1,11 @@
 import { Lane } from "./Lane.js"
+import { Road } from "./Road.js"
 import { Vehicle } from "./Vehicle.js"
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class TrafficMap {
-    constructor(roads, vehicles, intersections, specialNodes) {
+    constructor(roads = [], vehicles = [], intersections = [], specialNodes = []) {
         this._roads = roads;
         this._vehicles = vehicles;
         this._intersections = intersections;
@@ -130,4 +131,9 @@ export class TrafficMap {
         }
         return nodes;
     }
+    //temp function
+    // splitRoad(road, position) {
+    //     const road1 = new Road();
+    //     const road2;
+    // }
 }

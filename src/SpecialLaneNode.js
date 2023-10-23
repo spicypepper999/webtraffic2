@@ -31,7 +31,7 @@ export class SpecialLaneNode extends LaneNode {
         const vehicles = [];
         if (this.ruleset[0] == "source") {
             //MANUALLY SETTING CHECKING DISTANCE!! STINKY!!!
-            if (this.timer > this.ruleset[2] && this.ruleset[1][2].returnObstacles(this.ruleset[1][0], 100) == 0) {
+            if (this.timer > this.ruleset[2] && this.ruleset[1][1].returnObstacles(this.ruleset[1][0], 100) == 0) {
                 const newVehicle = new Vehicle(...this.ruleset[1]);
                 map.vehicles.push(newVehicle);
                 vehicles.push(newVehicle);

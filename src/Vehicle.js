@@ -2,9 +2,10 @@ import { Lane } from "./Lane.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class Vehicle {
-    constructor(position, direction, lane, speed, power, ruleset, sprite) {
+    constructor(position, lane, speed, power = 100, ruleset = [], sprite = undefined) {
         this._position = position;
-        this._direction = direction;
+        //fix this direction thing
+        this._direction = 1;
         this._lane = lane;
         this._speed = speed;
         this._power = power;
@@ -158,7 +159,7 @@ export class Vehicle {
         const XYDir = this.XYDir();
         this.sprite.position.set(XYDir.x, XYDir.y);
         this.sprite.rotation = XYDir.dir;
-        this.sprite.fill = this.color;
+        //this.sprite.fill = this.color;
     }
     returnCurrentObstacles(){
         return this.returnObstacles(this.tempCheckDistance());
