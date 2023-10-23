@@ -11,6 +11,7 @@ import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
 //import { map1 } from "./maps/map1.js";
 import { map1 } from "./maps/map2.js";
+//import { map1 } from "./maps/map3.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -80,6 +81,7 @@ function initializeIntersectionSprites(map) {
 function initializeVehicleSprites(map) {
     for (let vehicle of map.vehicles) {
         vehicle.sprite = two.makeRectangle(0, 0, 10, 10);
+//        vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
     }
 }
 
@@ -110,7 +112,7 @@ function initializeRoadSprites(map, roadTexture) {
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     let angle = Math.atan2(dy, dx);
 
-                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 16, distance); 
+                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 20, distance); 
                     roadSegment.rotation = angle + Math.PI/2;
                     roadSegment.fill = new Two.Texture('../textures/roadsmall2.png');
                 }
@@ -132,6 +134,7 @@ two.bind('update', function () {
                     const vehicle = map1.vehicles[map1.vehicles.indexOf(event[1][i])];
                     two.remove(vehicle.sprite);
                     vehicle.sprite = two.makeRectangle(0, 0, 10, 10);
+//                    vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
                 }
             }
             if (event[0] == "exit") {

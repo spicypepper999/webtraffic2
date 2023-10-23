@@ -1,18 +1,20 @@
+import { BasicNode } from "./BasicNode.js";
 import { RoadNode } from "./RoadNode.js";
 import { LaneNode } from "./LaneNode.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { Lane } from "./Lane.js";
 
 export class Intersection {
-    constructor(type, interfaceNodes) {
+    constructor(type, interfaceNodes, x, y, rotation) {
         this._interfaceNodes = interfaceNodes;
         this._intersectionNodes = [];
         this._lanes = [];
         this._type = type;
-        this.generateIntersection(type);
         this._timer = 0;
         this._currentVehicle = null;
         this._vehicleQueue = [];
+        this._node = new BasicNode(x, y, rotation);
+        this.generateIntersection(type);
     }
     set type(value) {
         this._type = value;
@@ -55,6 +57,12 @@ export class Intersection {
     }
     get vehicleQueue() {
         return this._vehicleQueue;
+    }
+    set node(value) {
+        this._node = value;
+    }
+    get node() {
+        return this._node;
     }
     generateIntersection(type) {
         if (type == "T2-2-2-YIELD") {
@@ -130,18 +138,26 @@ export class Intersection {
         if (type == "X2-2-2-2-STOP") {
             const newIntersection1 = new IntersectionLaneNode(this.interfaceNodes[0].getSourceNodesNormalized()[0], ["STOP", this]);
             this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getSourceNodesNormalized()[0], newIntersection1);
+            newIntersection1.setXY(this.node.x + (-10 * Math.cos(this.node.rotation) - (-10 * Math.sin(this.node.rotation))), this.node.y + (-10 * Math.cos(this.node.rotation) + (-10 * Math.sin(this.node.rotation))));
+            //newIntersection1.setXY(0, 0);
             this.intersectionNodes.push(newIntersection1);
 
             const newIntersection2 = new IntersectionLaneNode(this.interfaceNodes[0].getExitNodesNormalized()[0], ["STOP", this]);
             this.interfaceNodes[0].updateLaneNodeReference(this.interfaceNodes[0].getExitNodesNormalized()[0], newIntersection2);
+            newIntersection2.setXY(this.node.x + (-10 * Math.cos(this.node.rotation) - (10 * Math.sin(this.node.rotation))), this.node.y + (10 * Math.cos(this.node.rotation) + (-10 * Math.sin(this.node.rotation))));
+            //newIntersection2.setXY(this.node.x - (10 * Math.cos(this.node.rotation)), this.node.y + (10 * Math.sin(this.node.rotation)));
             this.intersectionNodes.push(newIntersection2);
 
             const newIntersection3 = new IntersectionLaneNode(this.interfaceNodes[1].getSourceNodesNormalized()[0], ["STOP", this]);
             this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getSourceNodesNormalized()[0], newIntersection3);
+            newIntersection3.setXY(this.node.x + (10 * Math.cos(this.node.rotation) - (10 * Math.sin(this.node.rotation))), this.node.y + (10 * Math.cos(this.node.rotation) + (10 * Math.sin(this.node.rotation))));
+            //newIntersection3.setXY(this.node.x + (10 * Math.cos(this.node.rotation)), this.node.y + (10 * Math.sin(this.node.rotation)));
             this.intersectionNodes.push(newIntersection3);
 
             const newIntersection4 = new IntersectionLaneNode(this.interfaceNodes[1].getExitNodesNormalized()[0], ["STOP", this]);
             this.interfaceNodes[1].updateLaneNodeReference(this.interfaceNodes[1].getExitNodesNormalized()[0], newIntersection4);
+            newIntersection4.setXY(this.node.x + (10 * Math.cos(this.node.rotation) - (-10 * Math.sin(this.node.rotation))), this.node.y + (-10 * Math.cos(this.node.rotation) + (10 * Math.sin(this.node.rotation))));
+            //newIntersection4.setXY(this.node.x + (10 * Math.cos(this.node.rotation)), this.node.y - (10 * Math.sin(this.node.rotation)));
             this.intersectionNodes.push(newIntersection4);
 
             this.interfaceNodes[2].updateLaneNodeReference(this.interfaceNodes[2].getSourceNodesNormalized()[0], newIntersection4);

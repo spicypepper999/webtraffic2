@@ -9,12 +9,13 @@ import { Intersection } from "../Intersection.js";
 import { IntersectionLaneNode } from "../IntersectionLaneNode.js";
 import { SpecialLaneNode } from "../SpecialLaneNode.js";
 
-const road1 = new Road([new RoadNode(100, 200), new RoadNode(250, 350), new RoadNode(590, 350)], 2, 50, "red");
-const road2 = new Road([new RoadNode(800, 500), new RoadNode(750, 350), new RoadNode(610, 350)], 2, 50, "red");
-const road3 = new Road([new RoadNode(500, 100), new RoadNode(600, 100), new RoadNode(600, 340)], 2, 50, "red");
-const road4 = new Road([new RoadNode(400, 700), new RoadNode(600, 700), new RoadNode(600, 360)], 2, 50, "red");
+const road1 = new Road([new RoadNode(100, 200), new RoadNode(250, 350), new RoadNode(550, 350)], 2, 100, "red");
+const road2 = new Road([new RoadNode(800, 500), new RoadNode(750, 350), new RoadNode(650, 350)], 2, 100, "red");
+const road3 = new Road([new RoadNode(500, 100), new RoadNode(600, 100), new RoadNode(600, 300)], 2, 100, "red");
+const road4 = new Road([new RoadNode(400, 700), new RoadNode(600, 700), new RoadNode(600, 400)], 2, 100, "red");
 
-const intersection1 = new Intersection("X2-2-2-2-STOP", [road1.lastNode(), road2.lastNode(), road3.lastNode(), road4.lastNode()]);
+const intersection1 = new Intersection("X2-2-2-2-STOP", [road1.lastNode(), road2.lastNode(), road3.lastNode(), road4.lastNode()], 600, 350, 0);
+console.log(intersection1.node);
 
 const source1 = new SpecialLaneNode(road1.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road1.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 1]);
 road1.updateLaneNodeReference(road1.firstNode().getSourceNodesNormalized()[0], source1);
@@ -31,13 +32,7 @@ road3.updateLaneNodeReference(road3.firstNode().getExitNodesNormalized()[0], exi
 const source3 = new SpecialLaneNode(road4.firstNode().getSourceNodesNormalized()[0], ["source", [1, 1, road4.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 3]);
 road4.updateLaneNodeReference(road4.firstNode().getSourceNodesNormalized()[0], source3);
 
-//const car1 = new Vehicle(5, 1, road2.lanes[0], 0, 100, [], );
-
 const map1 = new TrafficMap([road1, road2, road3, road4], [], [intersection1], [source1, exit1, source2, exit2, source3]);
 source2.ruleset[1][5] = map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road4.lanes[0]);
-// console.log(road3.lanes[0]);
-// console.log(source2.ruleset[1][5]);
-// console.log(map1.generateBruteforcePathfind(road2.firstNode().getSourceNodesNormalized()[0].lanes[0], road3.lanes[0]));
-// console.log(intersection1.intersectionNodes[3].lanes);
 
 export { map1 };

@@ -1,7 +1,8 @@
 export class BasicNode {
-    constructor(x, y) {
+    constructor(x, y, rotation = 0) {
         this._x = x;
         this._y = y;
+        this._rotation = rotation;
     }
     set x(value) {
         this._x = value;
@@ -15,7 +16,13 @@ export class BasicNode {
     get y() {
         return this._y;
     }
-    get xy() {
+    set rotation(value) {
+        this._rotation = value;
+    }
+    get rotation() {
+        return this._rotation;
+    }
+    xy() {
         return { x: this._x, y: this._y };
     }
     setXY(x, y) {

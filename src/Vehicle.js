@@ -63,7 +63,7 @@ export class Vehicle {
     }
 
     tempCheckDistance(){
-        return this.getLaneStoppingDistance() + 50;
+        return this.getStoppingDistance() + 50;
     }
     //i dont think this works properly
     getStoppingDistance() {
