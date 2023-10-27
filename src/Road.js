@@ -11,9 +11,10 @@ export class Road {
         this._color = color;
         this._lanes = [];
         this._lanes = this.generateLanes(nodes, lanes, 20);
-        if (convertEndStop) {
-            this.convertEndStop();
-        }
+        // if (convertEndStop) {
+        //     this.convertEndStop();
+        // }
+        this.convertEndStop();
     }
     set nodes(value) {
         this._nodes = value;

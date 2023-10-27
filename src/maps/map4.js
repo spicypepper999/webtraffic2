@@ -12,7 +12,6 @@ import { SpecialLaneNode } from "../SpecialLaneNode.js";
 const map1 = new TrafficMap();
 
 map1.roads.push(new Road([new RoadNode(200, 100), new RoadNode(250, 550), new RoadNode(550, 900)], 2, 100), new Road([new RoadNode(700, 100), new RoadNode(750, 350), new RoadNode(150, 900)], 2, 100), new Road([new RoadNode(400, 300), new RoadNode(900, 800), new RoadNode(1000, 700)], 2, 100));
-//map1.convertEndStop();
 
 map1.generateSplitIntersection(map1.roads[0], map1.roads[1], "X2-2-2-2-ROUND");
 map1.generateSplitIntersection(map1.roads[0], map1.roads[3], "X2-2-2-2-ROUND");
