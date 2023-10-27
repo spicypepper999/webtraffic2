@@ -11,8 +11,8 @@ import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
 //import { map1 } from "./maps/map1.js";
 //import { map1 } from "./maps/map2.js";
-import { map1 } from "./maps/map3.js";
-//import { map1 } from "./maps/map4.js";
+//import { map1 } from "./maps/map3.js";
+import { map1 } from "./maps/map4.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -170,8 +170,8 @@ two.bind('update', function (frame) {
 
     
     document.querySelector("#mousecoords").innerHTML = mousePosition[0] + " " + mousePosition[1];
-    document.querySelector("#counter").innerHTML = map1.specialNodes[2].counter + " " + map1.specialNodes[3].counter;
-    document.querySelector("#frames").innerHTML = frame;
+    // document.querySelector("#counter").innerHTML = map1.specialNodes[2].counter + " " + map1.specialNodes[3].counter;
+    // document.querySelector("#frames").innerHTML = frame;
 
     //
     //

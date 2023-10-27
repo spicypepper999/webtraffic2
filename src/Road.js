@@ -4,14 +4,16 @@ import { Lane } from "./Lane.js";
 import { LaneNode } from "./LaneNode.js";
 
 export class Road {
-    constructor(nodes, lanes, speedLimit, color = "red") {
+    constructor(nodes = [], lanes = 2, speedLimit = 50, color = "red", convertEndStop = true) {
         this._nodes = nodes;
         this.addSelfToNodes();
         this._speedLimit = speedLimit;
         this._color = color;
         this._lanes = [];
         this._lanes = this.generateLanes(nodes, lanes, 20);
-        this.convertEndStop();
+        if (convertEndStop) {
+            this.convertEndStop();
+        }
     }
     set nodes(value) {
         this._nodes = value;
@@ -168,19 +170,19 @@ export class Road {
             }
         }
     }
-    findIntersectPosition(road){
+    findIntersectPosition(road) {
         const thisLength = this.lanes[0].length();
         const nextLength = road.lanes[0].length();
 
         let thisPosition = 0;
         let nextPosition = 0;
         let minDistance = thisLength + nextLength;
-        for(let i = 0; i < thisLength; i++){
+        for (let i = 0; i < thisLength; i++) {
             const thisCoord = this.lanes[0].XYDirFromPosition(i);
-            for(let j = 0; j < nextLength; j++){
+            for (let j = 0; j < nextLength; j++) {
                 const nextCoord = road.lanes[0].XYDirFromPosition(j);
-                const distance =  Math.sqrt(((thisCoord.x - nextCoord.x)**2)+((thisCoord.y - nextCoord.y)**2));
-                if(distance < minDistance){
+                const distance = Math.sqrt(((thisCoord.x - nextCoord.x) ** 2) + ((thisCoord.y - nextCoord.y) ** 2));
+                if (distance < minDistance) {
                     minDistance = distance;
                     thisPosition = i;
                     nextPosition = j;

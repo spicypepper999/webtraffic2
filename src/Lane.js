@@ -59,10 +59,9 @@ export class Lane {
         let length = 0;
         let nodeCompare = this.nodes[0];
         let i = 0;
-        while(length < position){
-            length += this.positionOfNode(nodeCompare);
-            nodeCompare = this.nodes[i];
+        while(this.positionOfNode(nodeCompare) <= position){
             i++;
+            nodeCompare = this.nodes[i];
         }
         return i;
     }

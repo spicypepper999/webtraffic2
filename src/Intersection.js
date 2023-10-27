@@ -226,10 +226,10 @@ export class Intersection {
             // this.interfaceNodes[2].convertGo();
             // this.interfaceNodes[3].convertGo();
 
-            this.lanes.push(new Lane([this.intersectionNodes[0], new LaneNode(this.node.x - 31, this.node.y), this.intersectionNodes[1]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[1], new LaneNode(this.node.x, this.node.y + 31),this.intersectionNodes[2]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[2], new LaneNode(this.node.x + 31, this.node.y) ,this.intersectionNodes[3]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[3], new LaneNode(this.node.x, this.node.y - 31),this.intersectionNodes[0]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[0], new LaneNode(this.node.x + (-31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (-31 * Math.sin(this.node.rotation)))), this.intersectionNodes[1]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[1], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (31 * Math.sin(this.node.rotation))), this.node.y + (31 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[2]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[2], new LaneNode(this.node.x + (31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (31 * Math.sin(this.node.rotation)))) ,this.intersectionNodes[3]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[3], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (-31 * Math.sin(this.node.rotation))), this.node.y + (-31 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[0]], 30));
 
             this.intersectionNodes[0].ruleset = ["YIELD", this.lanes[3], 0, 50];
             this.intersectionNodes[1].ruleset = ["YIELD", this.lanes[0], 0, 50];

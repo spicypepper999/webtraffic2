@@ -15,7 +15,6 @@ const road3 = new Road([new RoadNode(500, 100), new RoadNode(600, 100), new Road
 const road4 = new Road([new RoadNode(400, 700), new RoadNode(600, 700), new RoadNode(600, 400)], 2, 100, "red");
 
 const intersection1 = new Intersection("X2-2-2-2-STOP", [road1.lastNode(), road2.lastNode(), road3.lastNode(), road4.lastNode()], 600, 350, 0);
-console.log(intersection1.node);
 
 const source1 = new SpecialLaneNode(road1.firstNode().getSourceNodesNormalized()[0], ["source", [1,  road1.firstNode().getSourceNodesNormalized()[0].lanes[0], 0, 100, [], ], 2]);
 road1.updateLaneNodeReference(road1.firstNode().getSourceNodesNormalized()[0], source1);
