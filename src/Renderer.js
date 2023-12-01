@@ -13,6 +13,7 @@ import { SpecialLaneNode } from "./SpecialLaneNode.js";
 //import { map1 } from "./maps/map2.js";
 //import { map1 } from "./maps/map3.js";
 import { map1 } from "./maps/map4.js";
+//import { map1 } from "./maps/map5.js";
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
@@ -33,8 +34,8 @@ function initializeNodeSprites(map){
         }
     }
     for (let node of roadNodes){
-        // let roadNode = two.makeCircle(node.x, node.y, 5);
-        // roadNode.fill = "lightgray";
+        let roadNode = two.makeCircle(node.x, node.y, 5);
+        roadNode.fill = "lightgray";
     }
     for (let node of intersectionNodes){
         const laneNode = two.makeCircle(node.x, node.y, 3);

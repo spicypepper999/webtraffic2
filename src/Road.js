@@ -4,16 +4,13 @@ import { Lane } from "./Lane.js";
 import { LaneNode } from "./LaneNode.js";
 
 export class Road {
-    constructor(nodes = [], lanes = 2, speedLimit = 50, color = "red", convertEndStop = true) {
+    constructor(nodes = [], lanes = 2, speedLimit = 50, color = "red") {
         this._nodes = nodes;
         this.addSelfToNodes();
         this._speedLimit = speedLimit;
         this._color = color;
         this._lanes = [];
         this._lanes = this.generateLanes(nodes, lanes, 20);
-        // if (convertEndStop) {
-        //     this.convertEndStop();
-        // }
         this.convertEndStop();
     }
     set nodes(value) {

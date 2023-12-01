@@ -177,6 +177,8 @@ export class Intersection {
         }
         if(type == "X2-2-2-2-ROUND"){
 
+            
+
             const newIntersection1 = new IntersectionLaneNode(new LaneNode(this.node.x + (-25 * Math.cos(this.node.rotation) - (-25 * Math.sin(this.node.rotation))), this.node.y + (-25 * Math.cos(this.node.rotation) + (-25 * Math.sin(this.node.rotation)))), ["STOP", this]);
             this.intersectionNodes.push(newIntersection1);
 
@@ -221,11 +223,7 @@ export class Intersection {
             this.interfaceNodes[3].updateLaneNodeReference(this.interfaceNodes[3].getExitNodesNormalized()[0], newIntersection12);
             this.intersectionNodes.push(newIntersection12);
 
-            // this.interfaceNodes[0].convertGo();
-            // this.interfaceNodes[1].convertGo();
-            // this.interfaceNodes[2].convertGo();
-            // this.interfaceNodes[3].convertGo();
-
+            //wtf is this 31 shit
             this.lanes.push(new Lane([this.intersectionNodes[0], new LaneNode(this.node.x + (-31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (-31 * Math.sin(this.node.rotation)))), this.intersectionNodes[1]], 30));
             this.lanes.push(new Lane([this.intersectionNodes[1], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (31 * Math.sin(this.node.rotation))), this.node.y + (31 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[2]], 30));
             this.lanes.push(new Lane([this.intersectionNodes[2], new LaneNode(this.node.x + (31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (31 * Math.sin(this.node.rotation)))) ,this.intersectionNodes[3]], 30));

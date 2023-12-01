@@ -23,11 +23,11 @@ export class RoadNode extends BasicNode {
     updateLaneNodeReference(oldNode, newNode) {
         this.road.updateLaneNodeReference(oldNode, newNode);
         //for of loop didnt work here with references
-        for (let i = 0; i < this.laneNodes.length; i++) {
-            if (this.laneNodes[i] == oldNode) {
-                this.laneNodes[i] = newNode;
-            }
-        }
+        // for (let i = 0; i < this.laneNodes.length; i++) {
+        //     if (this.laneNodes[i] == oldNode) {
+        //         this.laneNodes[i] = newNode;
+        //     }
+        // }
     }
     getExitNodes() {
         const exit = [];
