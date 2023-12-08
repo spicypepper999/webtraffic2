@@ -176,9 +176,6 @@ export class Intersection {
 
         }
         if(type == "X2-2-2-2-ROUND"){
-
-            
-
             const newIntersection1 = new IntersectionLaneNode(new LaneNode(this.node.x + (-25 * Math.cos(this.node.rotation) - (-25 * Math.sin(this.node.rotation))), this.node.y + (-25 * Math.cos(this.node.rotation) + (-25 * Math.sin(this.node.rotation)))), ["STOP", this]);
             this.intersectionNodes.push(newIntersection1);
 
@@ -224,28 +221,33 @@ export class Intersection {
             this.intersectionNodes.push(newIntersection12);
 
             //wtf is this 31 shit
-            this.lanes.push(new Lane([this.intersectionNodes[0], new LaneNode(this.node.x + (-31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (-31 * Math.sin(this.node.rotation)))), this.intersectionNodes[1]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[1], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (31 * Math.sin(this.node.rotation))), this.node.y + (31 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[2]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[2], new LaneNode(this.node.x + (31 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (31 * Math.sin(this.node.rotation)))) ,this.intersectionNodes[3]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[3], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (-31 * Math.sin(this.node.rotation))), this.node.y + (-31 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[0]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[0], new LaneNode(this.node.x + (-32 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (-32 * Math.sin(this.node.rotation)))), this.intersectionNodes[1]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[1], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (32 * Math.sin(this.node.rotation))), this.node.y + (32 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[2]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[2], new LaneNode(this.node.x + (32 * Math.cos(this.node.rotation) - (0 * Math.sin(this.node.rotation))), this.node.y + (0 * Math.cos(this.node.rotation) + (32 * Math.sin(this.node.rotation)))) ,this.intersectionNodes[3]], 30));
+            this.lanes.push(new Lane([this.intersectionNodes[3], new LaneNode(this.node.x + (0 * Math.cos(this.node.rotation) - (-32 * Math.sin(this.node.rotation))), this.node.y + (-32 * Math.cos(this.node.rotation) + (0 * Math.sin(this.node.rotation)))),this.intersectionNodes[0]], 30));
 
-            this.intersectionNodes[0].ruleset = ["YIELD", this.lanes[3], 0, 50];
-            this.intersectionNodes[1].ruleset = ["YIELD", this.lanes[0], 0, 50];
-            this.intersectionNodes[2].ruleset = ["YIELD", this.lanes[1], 0, 50];
-            this.intersectionNodes[3].ruleset = ["YIELD", this.lanes[2], 0, 50];
+            const yieldDistance = 60;
+            this.intersectionNodes[0].ruleset = ["YIELD", this.lanes[3], 0, yieldDistance];
+            this.intersectionNodes[1].ruleset = ["YIELD", this.lanes[0], 0, yieldDistance];
+            this.intersectionNodes[2].ruleset = ["YIELD", this.lanes[1], 0, yieldDistance];
+            this.intersectionNodes[3].ruleset = ["YIELD", this.lanes[2], 0, yieldDistance];
 
-            this.lanes.push(new Lane([this.interfaceNodes[0].getExitNodesNormalized()[0], this.intersectionNodes[1]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[1], this.interfaceNodes[3].getSourceNodesNormalized()[0]], 30));
-            this.lanes.push(new Lane([this.interfaceNodes[3].getExitNodesNormalized()[0], this.intersectionNodes[2]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[2], this.interfaceNodes[1].getSourceNodesNormalized()[0]], 30));
-            this.lanes.push(new Lane([this.interfaceNodes[1].getExitNodesNormalized()[0], this.intersectionNodes[3]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[3], this.interfaceNodes[2].getSourceNodesNormalized()[0]], 30));
-            this.lanes.push(new Lane([this.interfaceNodes[2].getExitNodesNormalized()[0], this.intersectionNodes[0]], 30));
-            this.lanes.push(new Lane([this.intersectionNodes[0], this.interfaceNodes[0].getSourceNodesNormalized()[0]], 30));
+            const speedLimit = 30;
+            this.lanes.push(new Lane([this.interfaceNodes[0].getExitNodesNormalized()[0], this.intersectionNodes[1]], speedLimit));
+            this.lanes.push(new Lane([this.intersectionNodes[1], this.interfaceNodes[3].getSourceNodesNormalized()[0]], speedLimit));
+            this.lanes.push(new Lane([this.interfaceNodes[3].getExitNodesNormalized()[0], this.intersectionNodes[2]], speedLimit));
+            this.lanes.push(new Lane([this.intersectionNodes[2], this.interfaceNodes[1].getSourceNodesNormalized()[0]], speedLimit));
+            this.lanes.push(new Lane([this.interfaceNodes[1].getExitNodesNormalized()[0], this.intersectionNodes[3]], speedLimit));
+            this.lanes.push(new Lane([this.intersectionNodes[3], this.interfaceNodes[2].getSourceNodesNormalized()[0]], speedLimit));
+            this.lanes.push(new Lane([this.interfaceNodes[2].getExitNodesNormalized()[0], this.intersectionNodes[0]], speedLimit));
+            this.lanes.push(new Lane([this.intersectionNodes[0], this.interfaceNodes[0].getSourceNodesNormalized()[0]], speedLimit));
 
         }
     }
 
-
-
+    updateAllSprites(two, roadTexture){
+        for(let lane of this.lanes){
+            lane.updateAllSprites(two, roadTexture);
+        }
+    }
 }

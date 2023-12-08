@@ -23,4 +23,8 @@ export class LaneNode extends BasicNode {
         }
         return startLanes;
     }
+    updateNodeSprite(two){
+        two.remove(this.sprite);
+        this.sprite = two.makeCircle(this.x, this.y, 3);
+    }
 }

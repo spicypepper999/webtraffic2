@@ -3,12 +3,13 @@ import { LaneNode } from "./LaneNode.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 
 export class Lane {
-    constructor(nodes, speedLimit, color="red") {
+    constructor(nodes, speedLimit, color = "red") {
         this._nodes = nodes;
         this.addSelfToNodes();
         this._speedLimit = speedLimit;
         this._color = color;
         this._vehicles = [];
+        this._sprites = [];
     }
     set nodes(value) {
         this._nodes = value;
@@ -34,13 +35,19 @@ export class Lane {
     get vehicles() {
         return this._vehicles;
     }
-    lastNode(){
-        return this.nodes[this.nodes.length-1];
+    set sprites(value) {
+        this._sprites = value;
+    }
+    get sprites() {
+        return this._sprites;
+    }
+    lastNode() {
+        return this.nodes[this.nodes.length - 1];
     }
     //add reference of self to nodes
-    addSelfToNodes(){
-        for(let node of this.nodes){
-            if(node instanceof LaneNode && !node.lanes.includes(this)){
+    addSelfToNodes() {
+        for (let node of this.nodes) {
+            if (node instanceof LaneNode && !node.lanes.includes(this)) {
                 node.lanes.push(this);
             }
         }
@@ -55,11 +62,11 @@ export class Lane {
         }
         return length;
     }
-    getIndexFromPosition(position){
+    getIndexFromPosition(position) {
         let length = 0;
         let nodeCompare = this.nodes[0];
         let i = 0;
-        while(this.positionOfNode(nodeCompare) <= position){
+        while (this.positionOfNode(nodeCompare) <= position) {
             i++;
             nodeCompare = this.nodes[i];
         }
@@ -67,121 +74,162 @@ export class Lane {
     }
     //Get coordinates and direction from given position.
     XYDirFromPosition(position) {
-        const node = new BasicNode(0,0);
+        const node = new BasicNode(0, 0);
         let dir;
         //if position <= 0, sets coordinates to first node, pointing to second node
         if (position <= 0) {
             node.setToNode(this.nodes[0]);
             dir = Math.atan2(this.nodes[1].y - this.nodes[0].y, this.nodes[1].x - this.nodes[0].y);
-            return {x: node.x, y: node.y, dir};
+            return { x: node.x, y: node.y, dir };
         }
         //if position > total length, sets coordinates to last node, pointing from second-to-last node to last node
         if (position > this.length()) {
             node.setToNode(this.lastNode());
             dir = Math.atan2(this.lastNode().y - this.nodes[this.nodes.length - 2].y, this.lastNode().x - this.nodes[this.nodes.length - 2].y);
-            return {x: node.x, y: node.y, dir};
+            return { x: node.x, y: node.y, dir };
         }
         //otherwise, go along lane and calculate coordinates/direction
         let distanceLeft = position;
         node.setToNode(this.nodes[0]);
         for (let i = 1; i < this.nodes.length && distanceLeft > 0; i++) {
             if (distanceLeft < node.distanceTo(this.nodes[i])) {
-              let dx = (Math.cos(node.directionTo(this.nodes[i])) * distanceLeft);
-              let dy = (Math.sin(node.directionTo(this.nodes[i])) * distanceLeft);
-              dx = node.x - dx;
-              dy = node.y - dy;
-              node.x = dx;
-              node.y = dy;
-              dir = Math.atan2(this.nodes[i].y - this.nodes[i-1].y, this.nodes[i].x - this.nodes[i-1].x);
-              return {x: node.x, y: node.y, dir};
+                let dx = (Math.cos(node.directionTo(this.nodes[i])) * distanceLeft);
+                let dy = (Math.sin(node.directionTo(this.nodes[i])) * distanceLeft);
+                dx = node.x - dx;
+                dy = node.y - dy;
+                node.x = dx;
+                node.y = dy;
+                dir = Math.atan2(this.nodes[i].y - this.nodes[i - 1].y, this.nodes[i].x - this.nodes[i - 1].x);
+                return { x: node.x, y: node.y, dir };
             }
             distanceLeft -= node.distanceTo(this.nodes[i]);
             node.setToNode(this.nodes[i]);
-            dir = Math.atan2(this.nodes[i].y - this.nodes[i-1].y, this.nodes[i].x - this.nodes[i-1].x);
-          }
-          return {x: node.x, y: node.y, dir};
+            dir = Math.atan2(this.nodes[i].y - this.nodes[i - 1].y, this.nodes[i].x - this.nodes[i - 1].x);
+        }
+        return { x: node.x, y: node.y, dir };
     }
     //Get position of given node along lane (node must be part of lane);
-    positionOfNode(node){
+    positionOfNode(node) {
         let position = 0;
         let nodePrevious = this.nodes[0];
-        for(let nodeCompare of this.nodes){
+        for (let nodeCompare of this.nodes) {
             position += nodePrevious.distanceTo(nodeCompare);
-            if(node == nodeCompare){
+            if (node == nodeCompare) {
                 return position;
             }
             nodePrevious = nodeCompare;
         }
         return position;
     }
-    reverse(){
+    reverse() {
         this.nodes.reverse();
     }
-    returnObstacles(position, distance, vehicle = null){
+    returnObstacles(position, distance, vehicle = null) {
         const obstacles = [];
-        for(let vehicle2 of this.vehicles){
-            if((vehicle != vehicle2) && ((vehicle2.position - position) <= distance) && ((vehicle2.position - position) >= 0)){
+        for (let vehicle2 of this.vehicles) {
+            if ((vehicle != vehicle2) && ((vehicle2.position - position) <= distance) && ((vehicle2.position - position) >= 0)) {
                 obstacles.push(vehicle2);
             }
         }
-        for(let node of this.nodes){
-            if(((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0) && node.isObstacle(vehicle)){
+        for (let node of this.nodes) {
+            if (((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0) && node.isObstacle(vehicle)) {
                 obstacles.push(node);
             }
         }
         return obstacles;
     }
-    returnVehicles(position, distance){
+    returnVehicles(position, distance) {
         const obstacles = [];
-        for(let vehicle of this.vehicles){
-            if(((vehicle.position - position) <= distance) && ((vehicle.position - position) >= 0)){
+        for (let vehicle of this.vehicles) {
+            if (((vehicle.position - position) <= distance) && ((vehicle.position - position) >= 0)) {
                 obstacles.push(vehicle);
             }
         }
         return obstacles;
     }
-    returnNodes(position, distance){
+    returnNodes(position, distance) {
         const obstacles = [];
-        for(let node of this.nodes){
-            if(((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0)){
+        for (let node of this.nodes) {
+            if (((this.positionOfNode(node) - position) <= distance) && ((this.positionOfNode(node) - position) >= 0)) {
                 obstacles.push(node);
             }
         }
         return obstacles;
     }
     //returns old and new node so road can update its own references
-    convertEndStop(){
+    convertEndStop() {
         const newNode = new IntersectionLaneNode(this.lastNode(), ["FULLSTOP"]);
         const oldNode = this.lastNode();
         this.nodes[this.nodes.length - 1] = newNode;
-        return {oldNode: oldNode, newNode: newNode};
+        return { oldNode: oldNode, newNode: newNode };
     }
-    convertEndGo(){
+    convertEndGo() {
         const newNode = new IntersectionLaneNode(this.lastNode(), ["GO"]);
         const oldNode = this.lastNode();
         this.nodes[this.nodes.length - 1] = newNode;
-        return {oldNode: oldNode, newNode: newNode};
+        return { oldNode: oldNode, newNode: newNode };
     }
     //troll face code
-    findIntersectPosition(lane){
+    findIntersectPosition(lane) {
         const thisLength = this.length();
         const nextLength = lane.length();
 
         let thisPosition = 0;
         let nextPosition = 0;
         let minDistance = thisLength + nextLength;
-        for(let i = 0; i < thisLength; i++){
+        for (let i = 0; i < thisLength; i++) {
             const thisCoord = this.XYDirFromPosition(i);
-            for(let j = 0; j < nextLength; j++){
+            for (let j = 0; j < nextLength; j++) {
                 const nextCoord = lane.XYDirFromPosition(j);
-                const distance =  Math.sqrt(((thisCoord.x - nextCoord.x)**2)+((thisCoord.y - nextCoord.y)**2));
-                if(distance < minDistance){
+                const distance = Math.sqrt(((thisCoord.x - nextCoord.x) ** 2) + ((thisCoord.y - nextCoord.y) ** 2));
+                if (distance < minDistance) {
                     minDistance = distance;
                     thisPosition = i;
                     nextPosition = j;
                 }
             }
         }
-        return {thisPosition, nextPosition};
+        return { thisPosition, nextPosition };
+    }
+
+    //this is where we generate the sprites!!!
+    updateLaneSprites(two, roadTexture) {
+        this.removeLaneSprites(two);
+        for (let i = 0; i < this.nodes.length; i++) {
+            if (i >= 1) {
+                const startX = this.nodes[i - 1].x;
+                const startY = this.nodes[i - 1].y;
+                const endX = this.nodes[i].x;
+                const endY = this.nodes[i].y;
+
+                const dx = endX - startX;
+                const dy = endY - startY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+
+                const roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 20, distance);
+                roadSegment.rotation = angle + Math.PI / 2;
+                roadSegment.fill = roadTexture;
+                this.sprites.push(roadSegment);
+            }
+        }
+    }
+    
+    removeLaneSprites(two){
+        while (this.sprites.length > 0) {
+            const currentSprite = this.sprites.pop();
+            two.remove(currentSprite);
+        }
+    }
+
+    updateNodeSprite(two){
+        for(let node of this.nodes){
+            node.updateNodeSprite(two);
+        }
+    }
+
+    updateAllSprites(two, roadTexture){
+        this.updateLaneSprites(two, roadTexture);
+        this.updateNodeSprite(two);
     }
 }

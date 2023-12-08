@@ -12,6 +12,8 @@ export class Road {
         this._lanes = [];
         this._lanes = this.generateLanes(nodes, lanes, 20);
         this.convertEndStop();
+        this._sprites = [];
+        //this.initializeRoadSprites('../textures/roadsmall2.png');
     }
     set nodes(value) {
         this._nodes = value;
@@ -36,6 +38,12 @@ export class Road {
     }
     get color() {
         return this._color;
+    }
+    set sprites(value) {
+        this._sprites = value;
+    }
+    get sprites() {
+        return this._sprites;
     }
     firstNode() {
         return this.nodes[0];
@@ -187,6 +195,50 @@ export class Road {
                 }
             }
         }
-        return thisPosition;
+        if (minDistance < 1) {
+            return thisPosition;
+        } else {
+            return null;
+        }
+    }
+
+    // updateRoadSprites(roadTexture, two) {
+    //     while(this.sprites.length > 0){
+    //         const currentSprite = this.sprites.pop();
+    //         two.remove(currentSprite);
+    //     }
+    //     for (let lane of this.lanes) {
+    //         for (let i = 0; i < lane.nodes.length; i++) {
+    //             if (i >= 1) {
+    //                 const startX = lane.nodes[i - 1].x;
+    //                 const startY = lane.nodes[i - 1].y;
+    //                 const endX = lane.nodes[i].x;
+    //                 const endY = lane.nodes[i].y;
+
+    //                 const dx = endX - startX;
+    //                 const dy = endY - startY;
+    //                 const distance = Math.sqrt(dx * dx + dy * dy);
+    //                 const angle = Math.atan2(dy, dx);
+
+    //                 const roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 20, distance);
+    //                 roadSegment.rotation = angle + Math.PI / 2;
+    //                 roadSegment.fill = roadTexture;
+    //                 this.sprites.push(roadSegment);
+    //             }
+    //         }
+    //     }
+    // }
+
+    //this is where we generate the sprites!!!
+    updateRoadSprites(two, roadTexture) {
+        for(let lane of this.lanes){
+            lane.updateAllSprites(two, roadTexture);
+        }
+    }
+
+    removeRoadSprites(two) {
+        for(let lane of this.lanes){
+            lane.removeSprites(two);
+        }
     }
 }

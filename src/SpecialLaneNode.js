@@ -30,7 +30,7 @@ export class SpecialLaneNode extends LaneNode {
         this.timer += delta;
         const vehicles = [];
         if (this.ruleset[0] == "source") {
-            //MANUALLY SETTING CHECKING DISTANCE!! STINKY!!!
+            //MANUALLY SETTING CHECKING DISTANCE!! STINKY!!! (?)
             if (this.timer > this.ruleset[2] && this.ruleset[1][1].returnObstacles(this.ruleset[1][0], 100) == 0) {
                 const newVehicle = new Vehicle(...this.ruleset[1]);
                 map.vehicles.push(newVehicle);
@@ -60,5 +60,9 @@ export class SpecialLaneNode extends LaneNode {
     }
     isObstacle(){
         return true;
+    }
+    updateNodeSprite(two) {
+        super.updateNodeSprite(two);
+            this.sprite.fill = "PURPLE";
     }
 }

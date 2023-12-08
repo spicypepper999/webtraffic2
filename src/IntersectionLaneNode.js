@@ -68,7 +68,7 @@ export class IntersectionLaneNode extends LaneNode {
             }
             if (vehicle == this.currentVehicle) {
                 return false;
-            } 
+            }
             for (let i = 0; i < this.ruleset.length; i++) {
                 if (this.ruleset[i] == "YIELD") {
                     if (vehicle.lane == this.ruleset[i + 1]) {
@@ -96,6 +96,19 @@ export class IntersectionLaneNode extends LaneNode {
         }
         if (this.ruleset[0] == "GO") {
             return false;
+        }
+    }
+
+    updateNodeSprite(two) {
+        super.updateNodeSprite(two);
+        if (this.ruleset[0] == "STOP" || this.ruleset[0] == "FULLSTOP") {
+            this.sprite.fill = "RED";
+        }
+        if (this.ruleset[0] == "GO") {
+            this.sprite.fill = "GREEN";
+        }
+        if (this.ruleset[0] == "YIELD") {
+            this.sprite.fill = "YELLOW";
         }
     }
 }

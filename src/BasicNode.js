@@ -3,6 +3,7 @@ export class BasicNode {
         this._x = x;
         this._y = y;
         this._rotation = rotation;
+        this._sprite = undefined;
     }
     set x(value) {
         this._x = value;
@@ -21,6 +22,12 @@ export class BasicNode {
     }
     get rotation() {
         return this._rotation;
+    }
+    set sprite(value) {
+        this._sprite = value;
+    }
+    get sprite() {
+        return this._sprite;
     }
     xy() {
         return { x: this._x, y: this._y };
@@ -45,4 +52,8 @@ export class BasicNode {
     directionTo(node) {
         return Math.atan2(this.distanceYTo(node), this.distanceXTo(node));
     }
+    
+    // updateNodeSprite(two){
+    //     console.log("test");
+    // }
 }

@@ -155,12 +155,19 @@ export class Vehicle {
         }
         return nextLane;
     }
-    updateSprite() {
+
+    updateVehicleSprite(two, vehicleTexture) {
+        two.remove(this.sprite);
         const XYDir = this.XYDir();
+        this.sprite = two.makeRectangle(0, 0, 20, 20);
+        this.sprite.fill = vehicleTexture;
         this.sprite.position.set(XYDir.x, XYDir.y);
         this.sprite.rotation = XYDir.dir;
+        this.sprite.stroke = this.color;
+        this.sprite.linewidth = 2;
         //this.sprite.fill = this.color;
     }
+
     returnCurrentObstacles(){
         return this.returnObstacles(this.tempCheckDistance());
     }

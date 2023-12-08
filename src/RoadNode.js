@@ -106,4 +106,10 @@ export class RoadNode extends BasicNode {
     //     }
     //     return exit;
     // }
+
+    updateNodeSprite(two){
+        two.remove(this.sprite);
+        this.sprite = two.makeCircle(this.x, this.y, 5);
+        this.sprite.fill = "LIGHTGRAY";
+    }
 }

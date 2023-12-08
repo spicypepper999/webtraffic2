@@ -9,126 +9,55 @@ import { RoadNode } from "./RoadNode.js";
 import { Intersection } from "./Intersection.js";
 import { IntersectionLaneNode } from "./IntersectionLaneNode.js";
 import { SpecialLaneNode } from "./SpecialLaneNode.js";
+
+//this is how i choose the map. i uncomment only one of the lines. there has to be a better way than this insane autismo 
+
 //import { map1 } from "./maps/map1.js";
 //import { map1 } from "./maps/map2.js";
 //import { map1 } from "./maps/map3.js";
 import { map1 } from "./maps/map4.js";
 //import { map1 } from "./maps/map5.js";
+//import { map1 } from "./maps/map6.js";
+
+//
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body);
 
-initializeRoadSprites(map1);
-initializeIntersectionSprites(map1);
-initializeVehicleSprites(map1);
-const nodes = initializeNodeSprites(map1);
+const roadTexture = new Two.Texture('../textures/roadsmall2.png');
+const vehicleTexture = new Two.Texture('../textures/carImage.png');
 
-function initializeNodeSprites(map){
-    const laneNodes = map.getLaneNodes();
-    const roadNodes = map.getRoadNodes();
-    const intersectionNodes = map.getIntersectionNodes();
-    const nodes = [];
-    for (let node of laneNodes){
-        const laneNode = two.makeCircle(node.x, node.y, 3);
-        if(node instanceof SpecialLaneNode){
-            laneNode.fill = "purple";
-        }
-    }
-    for (let node of roadNodes){
-        let roadNode = two.makeCircle(node.x, node.y, 5);
-        roadNode.fill = "lightgray";
-    }
-    for (let node of intersectionNodes){
-        const laneNode = two.makeCircle(node.x, node.y, 3);
-        nodes.push({ object: node, sprite: laneNode });
-    }
-    return nodes;
-}
+initializeAllSprites(map1, roadTexture, vehicleTexture);
+const nodes = map1.getIntersectionNodes();
 
-// function initializeIntersectionSprites(map) {
-//     for (let intersection of map.intersections) {
-//         for (let lane of intersection.lanes) {
-//             for (let i = 0; i < lane.nodes.length; i++) {
-//                 if (i >= 1) {
-//                     let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
-//                 }
-//             }
-//         }
-//     }
-// }
-
-function initializeIntersectionSprites(map) {
+function initializeIntersectionSprites(map, roadTexture) {
     for (let intersection of map.intersections) {
         for (let lane of intersection.lanes) {
-            for (let i = 0; i < lane.nodes.length; i++) {
-                if (i >= 1) {
-                    let startX = lane.nodes[i - 1].x;
-                    let startY = lane.nodes[i - 1].y;
-                    let endX = lane.nodes[i].x;
-                    let endY = lane.nodes[i].y;
-
-                    let dx = endX - startX;
-                    let dy = endY - startY;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let angle = Math.atan2(dy, dx);
-
-                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 16, distance); 
-                    roadSegment.rotation = angle + Math.PI/2;
-                    roadSegment.fill = new Two.Texture('../textures/roadsmall2.png');
-                }
-            }
+            lane.updateAllSprites(two, roadTexture);
         }
     }
 }
 
-function initializeVehicleSprites(map) {
+function initializeVehicleSprites(map, vehicleTexture) {
     for (let vehicle of map.vehicles) {
-        vehicle.sprite = two.makeRectangle(0, 0, 20, 20);
-        vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
+        vehicle.updateVehicleSprite(two, vehicleTexture);
     }
 }
-
-// function initializeRoadSprites(map) {
-//     for (let road of map.roads) {
-//         for (let lane of road.lanes) {
-//             for (let i = 0; i < lane.nodes.length; i++) {
-//                 if (i >= 1) {
-//                     let linePath = two.makeLine(lane.nodes[i - 1].x, lane.nodes[i - 1].y, lane.nodes[i].x, lane.nodes[i].y);
-//                 }
-//             }
-//         }
-//     }
-// }
 
 function initializeRoadSprites(map, roadTexture) {
     for (let road of map.roads) {
-        for (let lane of road.lanes) {
-            for (let i = 0; i < lane.nodes.length; i++) {
-                if (i >= 1) {
-                    let startX = lane.nodes[i - 1].x;
-                    let startY = lane.nodes[i - 1].y;
-                    let endX = lane.nodes[i].x;
-                    let endY = lane.nodes[i].y;
-
-                    let dx = endX - startX;
-                    let dy = endY - startY;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let angle = Math.atan2(dy, dx);
-
-                    let roadSegment = two.makeRectangle((startX + endX) / 2, (startY + endY) / 2, 20, distance); 
-                    roadSegment.rotation = angle + Math.PI/2;
-                    roadSegment.fill = new Two.Texture('../textures/roadsmall2.png');
-                }
-            }
-        }
+        road.updateRoadSprites(two, roadTexture);
     }
 }
 
+function initializeAllSprites(map, roadTexture, vehicleTexture) {
+    initializeRoadSprites(map, roadTexture);
+    initializeIntersectionSprites(map, roadTexture);
+    initializeVehicleSprites(map, vehicleTexture);
+}
 
 
 two.bind('update', function (frame) {
     const events = map1.tick((two.timeDelta / 1000));
-
-    //console.log(map1.vehicles[0].position);
 
     //EVENT SYSTEM TO HANDLE SPRITE CREATION/DELETION WHEN SPAWNING/REMOVING VEHICLES
     if (events.length > 0) {
@@ -136,10 +65,7 @@ two.bind('update', function (frame) {
             if (event[0] == "source") {
                 for (let i = 0; i < event[1].length; i++) {
                     const vehicle = map1.vehicles[map1.vehicles.indexOf(event[1][i])];
-                    two.remove(vehicle.sprite);
-                    vehicle.sprite = two.makeRectangle(0, 0, 20, 20);
-                    vehicle.sprite.fill = new Two.Texture('../textures/carImage.png');
-                    //vehicle.sprite.fill = vehicle.color;
+                    vehicle.updateVehicleSprite(two, vehicleTexture);
                 }
             }
             if (event[0] == "exit") {
@@ -151,25 +77,16 @@ two.bind('update', function (frame) {
             }
         }
     }
-
-    for (let vehicle of map1.vehicles) {
-        vehicle.updateSprite();
-    }
     for (let node of nodes) {
-        if (node.object.ruleset[0] == "STOP" || node.object.ruleset[0] == "FULLSTOP") {
-            node.sprite.fill = "RED";
-        }
-        if (node.object.ruleset[0] == "GO") {
-            node.sprite.fill = "GREEN";
-        }
-        if (node.object.ruleset[0] == "YIELD") {
-            node.sprite.fill = "YELLOW";
-        }
+        node.updateNodeSprite(two);
+    }
+    for (let vehicle of map1.vehicles) {
+        vehicle.updateVehicleSprite(two, vehicleTexture);
     }
     //
     //
 
-    
+
     document.querySelector("#mousecoords").innerHTML = mousePosition[0] + " " + mousePosition[1];
     // document.querySelector("#counter").innerHTML = map1.specialNodes[2].counter + " " + map1.specialNodes[3].counter;
     // document.querySelector("#frames").innerHTML = frame;
@@ -179,7 +96,40 @@ two.bind('update', function (frame) {
 
 });
 
-let mousePosition = [];
+const mousePosition = [];
 addEventListener("mousemove", (ev) => {
-    mousePosition = [ev.x, ev.y];
+    mousePosition[0] = ev.x;
+    mousePosition[1] = ev.y;
+});
+
+const nodeList = [];
+addEventListener("mouseup", (ev) => {
+    //const newNode = new RoadNode(mousePosition[0], mousePosition[1]);
+    nodeList.push(new RoadNode(mousePosition[0], mousePosition[1]));
+    const newRoad = new Road(nodeList, 2, 100);
+    newRoad.updateRoadSprites(two, roadTexture);
+    map1.roads.push(newRoad);
+    for (let i = 0; i < map1.roads.length - 1; i++) {
+        if (map1.roads[map1.roads.length - 1].findIntersectPosition(map1.roads[i]) != null) {
+            map1.generateSplitIntersection(map1.roads[map1.roads.length - 1], map1.roads[i], "X2-2-2-2-ROUND");
+            map1.roads[map1.roads.length - 2].updateRoadSprites(two, roadTexture);
+            map1.roads[map1.roads.length - 1].updateRoadSprites(two, roadTexture);
+            map1.intersections[map1.intersections.length - 1].updateAllSprites(two, roadTexture);
+            //initializeIntersectionSprites(map1, roadTexture);
+        }
+    }
+    while(nodeList.length > 0){
+        nodeList.pop();
+    }
+    console.log(nodeList);
+});
+
+addEventListener("mousedown", (ev) => {
+    nodeList.push(new RoadNode(mousePosition[0], mousePosition[1]));
+});
+
+addEventListener("keypress", (ev) => {
+    if (ev.key === "a") {
+        
+    }
 });
